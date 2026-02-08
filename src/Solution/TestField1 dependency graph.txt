@@ -1,0 +1,87 @@
+Projects:
+
+ALibCore
+  - ZLibStd
+
+BLibUtil
+  - ALibCore
+    - ZLibStd
+
+CLibApp
+  - ALibCore
+    - ZLibStd
+  - BLibUtil
+    - ALibCore
+      - ZLibStd
+
+DLibPlugin
+  - ALibCore
+    - ZLibStd
+  - SSharedStuff
+
+ELibWithLinks
+  - ALibCore
+    - ZLibStd
+
+FSharedApp
+  - ALibCore
+    - ZLibStd
+  - SSharedStuff
+  
+GMixedApp
+  - ALibCore
+    - ZLibStd
+  - BLibUtil
+    - ALibCore
+	    - ZLibStd
+ - DLibPlugin
+    - ALibCore
+      - ZLibStd
+    - SSharedStuff
+  - ELibWithLinks
+    - ALibCore
+      - ZLibStd
+  - ZLibStd
+
+SSharedStuff
+
+ZLibStd
+
+-------------
+Solutions:
+
+SolCore
+  - ALibCore
+  - ZLibStd
+
+SolApp 
+  - ALibCore
+  - BLibUtil
+  - CLibApp
+  - ZLibStd
+
+SolPlugin  
+  - ALibCore
+  - BLibUtil
+  - DLibPlugin
+  - SSharedStuff  
+  - ZLibStd
+
+SolLinks
+  - ALibCore
+  - ELibWithLinks
+  - ZLibStd
+
+SolShared  
+  - ALibCore
+  - FSharedApp
+  - SSharedStuff
+  - ZLibStd
+  
+SolMixed  
+  - ALibCore
+  - BLibUtil
+  - ELibWithLinks
+  - GMixedApp
+  - SSharedStuff  
+  - ZLibStd

@@ -45,13 +45,18 @@ Click **Run** to start the discovery process.
 
 ---
 
-## 3. Project Pre-selection
+## 3. Project Preselection
 
 After discovery of candidate projects (if there is more than one candidate), **C# Project Mover** opens a **Preselect dialog**. 
 
 ![](preselectwnd.png?raw=true)
 
-Pre-selection is optional. If at least one project is selected, only the preselected projects will be offered in the next step.  
+Preselection is optional. If at least one project is selected, only the preselected projects will be offered in the next step.  
+
+Buttons:
+- **OK** — Proceed with preselected projects only.
+- **Later** — Skip preselection and decide later, in the next step.
+- **Cancel** — Abort the operation.
 
 ---
 
@@ -63,7 +68,10 @@ Pre-selection is optional. If at least one project is selected, only the presele
 
 - **Current project folder**: The original location of the project.
 - **New project folder**: The target location where the project will be moved or copied.
-- **Project name / assembly name**: Optionally override the project or assembly names. Leaving fields empty defaults to the original names.
+- **Project name** Optionally override the project name. 
+- **New assembly name**: Optionally override the assembly name. *(**Note:** A copied project typically requires a new unique assembly name. C# Project Mover creates a default timestamp-based placeholder for this.)*
+
+- **Sync buttons** can align project name and project folder name or project name and assembly name.
 
 - **Dependent project roots**: Lists other projects that reference the current project, which can be selected to be affected. Check boxes for the projects that should update their references automatically. *(**Copy** mode only)*
 - **Other related solutions**: Lists solutions that reference the project, which can be selected to be affected. *(**Copy** mode only)*

@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>disable</Nullable>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Authors>JCL, audiamus, MemoTrap</Authors>
+    <Copyright>Copyright © 2003, 2021 - $([System.DateTime]::UtcNow.Year) audiamus, MemoTrap($([System.DateTime]::UtcNow.ToString("s")))</Copyright>
+    <AssemblyVersion>3.0.1.0</AssemblyVersion>
+    <FileVersion>3.0.1.0</FileVersion>
+  </PropertyGroup>
+
+</Project>

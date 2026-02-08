@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "ProjectMover.Gui.App": {
+      "commandName": "Project",
+      "commandLineArgs": "-dry-run"
+    }
+  }
+}

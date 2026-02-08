@@ -1,0 +1,47 @@
+Projects:
+
+ClassLibrary1
+
+ClassLibrary2
+  - ClassLibrary1
+
+ClassLibrary3
+  - ClassLibrary1
+  - SharedProject1
+
+ConsoleApp1
+  - ClassLibrary1
+
+ConsoleApp2
+  - ClassLibrary1
+  - ClassLibrary2
+    - ClassLibrary1
+  - ClassLibrary3
+    - ClassLibrary1
+    - SharedProject1
+
+ConsoleApp3
+  - ClassLibrary2
+    - ClassLibrary1
+  - SharedProject1
+
+SharedProject1
+  
+
+-------------
+Solutions:
+
+NetFramework1
+  - ConsoleApp1
+  - ConsoleApp2
+  - ClassLibrary1
+  - ClassLibrary2
+  - ClassLibrary3
+  - SharedProject1
+
+NetFramework2 
+  - ConsoleApp3
+  - ClassLibrary1
+  - ClassLibrary2
+  - SharedProject1
+

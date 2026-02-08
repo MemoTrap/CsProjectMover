@@ -11,7 +11,6 @@ A standalone utility to move or copy C# project files and folders while maintain
 
 ![](res/mainwnd.png?raw=true)
 
-![](res/detailswnd.png?raw=true)
 
 
 **C# Project Mover** is a Windows desktop tool for **moving or copying .NET projects** while preserving their internal structure and build integrity.
@@ -24,11 +23,12 @@ It is designed to safely relocate **modern and legacy C#/.NET projects** into ne
 
 Moving a .NET project is deceptively complex.
 
-Beyond the obvious `.csproj` file, projects may rely on:
+Beyond the obvious `.csproj` file and its containing folder, projects will be referenced by solutions. This will affect:
 - Implicitly included files
 - Explicitly included files
-- Convention-based folders (`Properties`, `Resources`)
-- Solution-relative paths and assumptions
+- Relative paths in solutions
+- Relative paths in referencing projects
+- Project GUIDs in for copies of legacy C# projects and Shared projects  
 
 **C# Project Mover** automates this process and helps ensure that a moved or copied project remains **buildable and structurally correct**.
 
@@ -107,10 +107,17 @@ Beyond the obvious `.csproj` file, projects may rely on:
 ## Download
 Windows setup package:
 
-**[CsProjectMover-0.0.1-Setup.exe](https://github.com/MemoTrap/CsProjectMover/releases/download/v0.0.1/CsProjectMover-0.0.1-Setup.exe)**
+**[CsProjectMover-1.0.0-Setup.exe](https://github.com/MemoTrap/CsProjectMover/releases/download/v1.0.0/CsProjectMover-1.0.0-Setup.exe)**
+
+
+### Automatic Updates
+
+**C# Project Mover** will automatically check for new releases on GitHub. When a newer version is available, the application offers to update itself, allowing users to stay current without manually downloading an installer.
 
 
 ---
+
+
 
 ## [User Guide](res/UserGuide.md)
 

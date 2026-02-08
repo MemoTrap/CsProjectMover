@@ -1,0 +1,5 @@
+﻿Modified files from project https://github.com/ygoe/FieldLog/blob/master/LogSubmit/Unclassified/UI/SystemMenu.cs
+Modified files from project https://github.com/audiamus/BookLibConnect
+Copyright (C) 2015 by ygoe
+Copyright (C) 2021 - 2023 by audiamus
+Licensed under the GNU General Public License v3.0 (GPL-3.0)

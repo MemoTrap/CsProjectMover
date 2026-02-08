@@ -1,0 +1,127 @@
+Projects:
+
+ClientConsoleApp
+  - ClientLib
+    - ClientProxy
+      - CommonContract
+        - CommonBcl
+        - RpcCommon
+    - RpcClient
+      - RpcCommon
+    - RpcClientProxyGenerator
+
+ClientGuiApp
+  - ClientLib
+    - ClientProxy
+      - CommonContract
+        - CommonBcl
+        - RpcCommon
+    - RpcClient
+      - RpcCommon
+    - RpcClientProxyGenerator
+  - RpcClientWinFormsControls
+    - RpcClient
+      - RpcCommon
+
+ClientLib
+  - ClientProxy
+    - CommonContract
+      - CommonBcl
+      - RpcCommon
+  - RpcClient
+    - RpcCommon
+  - RpcClientProxyGenerator
+
+ClientProxy
+  - CommonContract
+    - CommonBcl
+    - RpcCommon
+
+CommonBcl
+
+CommonContract
+  - CommonBcl
+  - RpcCommon
+  
+ServerApp
+  - ServerHost
+    - RpcServer
+      - RpcCommon
+  - ServerBiz
+    - CommonBcl
+  - ServerService
+    - CommonContract
+      - CommonBcl
+      - RpcCommon
+    - RpcServer
+      - RpcCommon
+    - ServerBiz
+      - CommonBcl
+
+ServerBiz
+  - CommonBcl
+
+ServerHost
+  - RpcServer
+    - RpcCommon
+
+ServerService
+  - CommonContract
+    - CommonBcl
+    - RpcCommon
+  - RpcServer
+    - RpcCommon
+  - ServerBiz
+    - CommonBcl
+
+RpcClient
+  - RpcCommon
+
+RpcClientProxyGenerator
+
+RpcClientWinFormsControls
+  - RpcClient
+    - RpcCommon
+
+RpcCommon
+
+RpcServer
+  - RpcCommon
+
+-------------
+Solutions:
+
+Application
+  - ClientConsoleApp
+  - ClientGuiApp
+  - ClientLib
+  - ClientProxy
+  - CommonBcl
+  - CommonContract
+  - ServerApp
+  - ServerBiz
+  - ServerHost
+  - ServerService
+  - RpcClient
+  - RpcClientProxyGenerator
+  - RpcClientWinFormsControls
+  - RpcCommon
+  - RpcServer
+
+RpcAppTemplate 
+  - ClientConsoleApp
+  - ClientGuiApp
+  - ClientLib
+  - ClientProxy
+  - CommonBcl
+  - CommonContract
+  - ServerApp
+  - ServerBiz
+  - ServerHost
+  - ServerService
+  - RpcClient
+  - RpcClientProxyGenerator
+  - RpcClientWinFormsControls
+  - RpcCommon
+  - RpcServer
+

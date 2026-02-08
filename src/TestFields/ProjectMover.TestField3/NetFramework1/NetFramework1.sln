@@ -1,0 +1,67 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36915.13
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClassLibrary1", "ClassLibrary1\ClassLibrary1.csproj", "{033E7CBF-5BA3-4EC9-99C3-032291814CCD}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "App", "App", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Lib", "Lib", "{35526EFF-1403-4B21-97FF-EC3F61201319}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClassLibrary2", "ClassLibrary2\ClassLibrary2.csproj", "{5ABE0FD0-F0C3-48D7-95DB-52334B7F8F70}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "SharedProject1", "SharedProject1\SharedProject1.shproj", "{D90C84BC-1A3D-45D5-90AF-52CD1AA2329A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClassLibrary3", "ClassLibrary3\ClassLibrary3.csproj", "{F023E613-F44E-41E6-8AC5-A9610D453A43}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApp1", "ConsoleApp1\ConsoleApp1.csproj", "{97BEC31A-6F6D-41DB-9B19-FD86CB2DD33D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApp2", "ConsoleApp2\ConsoleApp2.csproj", "{6B17A231-8311-44F7-A240-FA5A7062DFBD}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{033E7CBF-5BA3-4EC9-99C3-032291814CCD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{033E7CBF-5BA3-4EC9-99C3-032291814CCD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{033E7CBF-5BA3-4EC9-99C3-032291814CCD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{033E7CBF-5BA3-4EC9-99C3-032291814CCD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5ABE0FD0-F0C3-48D7-95DB-52334B7F8F70}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5ABE0FD0-F0C3-48D7-95DB-52334B7F8F70}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5ABE0FD0-F0C3-48D7-95DB-52334B7F8F70}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5ABE0FD0-F0C3-48D7-95DB-52334B7F8F70}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F023E613-F44E-41E6-8AC5-A9610D453A43}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F023E613-F44E-41E6-8AC5-A9610D453A43}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F023E613-F44E-41E6-8AC5-A9610D453A43}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F023E613-F44E-41E6-8AC5-A9610D453A43}.Release|Any CPU.Build.0 = Release|Any CPU
+		{97BEC31A-6F6D-41DB-9B19-FD86CB2DD33D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{97BEC31A-6F6D-41DB-9B19-FD86CB2DD33D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{97BEC31A-6F6D-41DB-9B19-FD86CB2DD33D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{97BEC31A-6F6D-41DB-9B19-FD86CB2DD33D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6B17A231-8311-44F7-A240-FA5A7062DFBD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6B17A231-8311-44F7-A240-FA5A7062DFBD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6B17A231-8311-44F7-A240-FA5A7062DFBD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6B17A231-8311-44F7-A240-FA5A7062DFBD}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{033E7CBF-5BA3-4EC9-99C3-032291814CCD} = {35526EFF-1403-4B21-97FF-EC3F61201319}
+		{5ABE0FD0-F0C3-48D7-95DB-52334B7F8F70} = {35526EFF-1403-4B21-97FF-EC3F61201319}
+		{D90C84BC-1A3D-45D5-90AF-52CD1AA2329A} = {35526EFF-1403-4B21-97FF-EC3F61201319}
+		{F023E613-F44E-41E6-8AC5-A9610D453A43} = {35526EFF-1403-4B21-97FF-EC3F61201319}
+		{97BEC31A-6F6D-41DB-9B19-FD86CB2DD33D} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{6B17A231-8311-44F7-A240-FA5A7062DFBD} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C0A87600-E3E0-4F14-B0A3-BF6B31A11A67}
+	EndGlobalSection
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		SharedProject1\SharedProject1.projitems*{d90c84bc-1a3d-45d5-90af-52cd1aa2329a}*SharedItemsImports = 13
+		SharedProject1\SharedProject1.projitems*{f023e613-f44e-41e6-8ac5-a9610d453a43}*SharedItemsImports = 4
+	EndGlobalSection
+EndGlobal

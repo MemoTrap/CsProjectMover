@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>ProjectMover.ConsApp</RootNamespace>
+    <Nullable>enable</Nullable>
+    <Company>MemoTrap</Company>
+    <Copyright>Copyright © 2026 - $([System.DateTime]::UtcNow.Year) MemoTrap ($([System.DateTime]::UtcNow.ToString("s")))</Copyright>
+    <AssemblyVersion>0.1.0.1</AssemblyVersion>
+    <FileVersion>0.1.0.1</FileVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ProjectMover.Lib\ProjectMover.Lib.csproj" />
+  </ItemGroup>
+
+</Project>

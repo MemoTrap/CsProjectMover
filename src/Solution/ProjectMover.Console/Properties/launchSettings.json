@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "ProjectMover.Console": {
+      "commandName": "Project",
+      "commandLineArgs": ""
+    }
+  }
+}
