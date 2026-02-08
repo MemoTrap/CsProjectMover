@@ -2,11 +2,18 @@
 
 **C# Project Mover** is a Windows desktop utility for moving or copying C#/.NET projects while preserving references in solutions and dependent projects. This guide walks through the typical workflow using the Windows Forms interface.
 
+There will also be *Tool Tips* in all dialogs as additional help.  
+
 ---
 
 ## 1. Launching ProjectMover
 
-Start the application from your installation directory or desktop icon. The main window displays the following key options:
+Start the application from your installation directory or desktop icon. 
+
+![](mainwnd.png?raw=true)
+
+
+The main window displays the following key options:
 
 - **Project Mode**
   - *Single project / single solution* — copy or move one project contained in a single solution.
@@ -37,15 +44,22 @@ Click **Run** to start the discovery process.
 ***Note:*** *Nothing will be modified in projects and solutions until individual and global confirmation* 
 
 ---
+
 ## 3. Project Pre-selection
 
-After discovery of candidate projects (if there is more than one candidate), **C# Project Mover** opens a **Preselect dialog**. Pre-selection is optional. If at least one project is selected, only the preselected projects will be offered in the next step.  
+After discovery of candidate projects (if there is more than one candidate), **C# Project Mover** opens a **Preselect dialog**. 
+
+![](preselectwnd.png?raw=true)
+
+Pre-selection is optional. If at least one project is selected, only the preselected projects will be offered in the next step.  
 
 ---
 
 ## 4. Project Details
 
 **C# Project Mover** presents the **Copy / Move Details dialog** for each project:
+
+![](detailswnd.png?raw=true)
 
 - **Current project folder**: The original location of the project.
 - **New project folder**: The target location where the project will be moved or copied.
@@ -62,7 +76,11 @@ Buttons:
 
 ## 5. Final confirmation
 
-Before executing, **C# Project Mover** shows a message box with a summary of affected projects and solutions. The lists include both implicitly selected (as dependencies) and explicitly selected projects and solutions, for a final review.   
+Before executing, **C# Project Mover** shows a message box with a summary of affected projects and solutions. 
+
+![](confirmbox.png?raw=true)
+
+The lists include both implicitly selected (as dependencies) and explicitly selected projects and solutions, for a final review.   
 
 ---
 
@@ -76,7 +94,7 @@ Once all projects have been reviewed:
 
 ---
 
-## 5. Post-Operation
+## 7. Post-Operation
 
 - Verify that all projects compile correctly in Visual Studio.
 - If you used the **Copy** operation, you now have duplicate projects that can be safely moved, refactored, or reorganized.

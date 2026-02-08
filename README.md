@@ -37,7 +37,7 @@ Beyond the obvious `.csproj` file, projects may rely on:
 ## Key Features
 
 ### Project Relocation
-- Move **or** copy C#/.NET projects to a new location
+- Move/rename **or** copy C#/.NET projects to a new location
 - Supports single-project and multi-project scenarios
 - Finds dependencies via Visual Studio Solution files
 
@@ -86,6 +86,8 @@ Beyond the obvious `.csproj` file, projects may rely on:
 ## Typical Use Cases
 
 - Restructuring a solution into a new repository layout
+- Synchronizing project and folder names
+- Synchronizing project and assembly names
 - Applying template projects by copying them into an application layout
 - Migrating projects between repositories or repository subtrees
 - Cleaning up historical project layouts
@@ -107,7 +109,12 @@ Windows setup package:
 
 **[CsProjectMover-0.0.1-Setup.exe](https://github.com/MemoTrap/CsProjectMover/releases/download/v0.0.1/CsProjectMover-0.0.1-Setup.exe)**
 
+
 ---
+
+## [User Guide](res/UserGuide.md)
+
+## [Developer Guide](res/DevGuide.md)
 
 ## Acknowledgements
 
