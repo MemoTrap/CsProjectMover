@@ -1,4 +1,4 @@
-# ProjectMover — Developer Guide
+# C# Project Mover — Developer Guide
 
 This document is intended for developers who want to understand, extend, or contribute to **C# Project Mover**.
 
