@@ -1,11 +1,11 @@
 # C# Project Mover
 A standalone utility to move or copy C# project files and folders while maintaining references in dependent projects and Visual Studio solutions
 
-[![GitHub All Releases](https://img.shields.io/github/downloads/MemoTrap/CsProjectMover/total)](...)
-[![GitHub](https://img.shields.io/github/license/MemoTrap/CsProjectMover)](...)
-[![](https://img.shields.io/badge/platform-Windows-blue)](...)
-[![](https://img.shields.io/badge/language-C%23-blue)](...)
-[![Visual Studio](https://img.shields.io/badge/IDE-Visual%20Studio-purple?logo=visualstudio)](...)
+[![GitHub All Releases](https://img.shields.io/github/downloads/MemoTrap/CsProjectMover/total)](https://github.com/MemoTrap/CsProjectMover/releases) 
+[![GitHub](https://img.shields.io/github/license/MemoTrap/CsProjectMover)](https://github.com/MemoTrap/CsProjectMover/blob/main/LICENSE) 
+[![](https://img.shields.io/badge/platform-Windows-blue)](http://microsoft.com/windows)
+[![](https://img.shields.io/badge/language-C%23-blue)](http://csharp.net/)
+[![Visual Studio](https://img.shields.io/badge/IDE-Visual%20Studio-purple?logo=visualstudio)](https://visualstudio.microsoft.com/)
 [![GitHub release (latest by date)](https://img.shields.io/github/v/release/MemoTrap/CsProjectMover)](https://github.com/MemoTrap/CsProjectMover/releases/latest)
 
 
@@ -129,7 +129,7 @@ ProjectMover builds on practical experience with real-world .NET project structu
 
 
 Parts of the implementation reuse and adapt several source files from the
-[BookLibConnect](https://github.com/audiamus/BookLibConnect) project by audiamus.
+[BookLibConnect](https://github.com/audiamus/BookLibConnect) project by [audiamus](https://github.com/audiamus).
 
 
 ---
