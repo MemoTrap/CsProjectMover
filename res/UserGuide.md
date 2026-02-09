@@ -115,7 +115,8 @@ Once all projects have been reviewed:
 
 - Use the **Reset** button on any dialog to restore default folder paths and project names.
 - Limit recursion depth to avoid accidentally processing unrelated projects.
-- Always ensure SVN working copies are clean before running operations if SVN integration is enabled.
+- Always ensure the **SVN working copy** is clean before running operations if **SVN** integration is enabled. This will enable proper reversion on error. 
+- Also make sure that there **no open files** in the SVN working copy. Close Visual Studio / Visual Studio Code instances and any other editors. Otherwise, SVN file operations may fail.   
 
 ### Legacy projects with multiple project files in a single folder or sub-folders
 - **C# Project Mover** will only accept a single project per folder and no projects further down sub-folders.
