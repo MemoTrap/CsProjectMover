@@ -468,11 +468,174 @@ namespace ProjectMover.Tests.Integration {
 
       // Layer 4 – build
 
-      await BuildSolutionAsync (affectedSolutionPath);
+      await BuildSolutionsAsync (field);
     }
 
+    public static async Task Move05_ALibCore_BLibUtil_2ndRun (TestFieldFixture field, bool svn = false) {
 
-    public static async Task Move05_08_Rename_ALibCore (     
+      // Arrange
+
+      string projNameA = A_LIB_CORE;
+      string projFileA = projNameA + CSPROJ;
+      string oldProjPathA = field.Project (projFileA);
+      string projNameB = B_LIB_UTIL;
+      string projFileB = projNameB + CSPROJ;
+      string oldProjPathB = field.Project (projFileB);
+
+      string destFolderRoot = Path.Combine (field.Root, RELOCATED);
+
+      string newProjPathA = oldProjPathA.ToNewDestinationPath (
+          field.Root,
+          destFolderRoot);
+      string newProjFolderA = Path.GetDirectoryName (newProjPathA)!;
+      string newProjPathB = oldProjPathB.ToNewDestinationPath (
+          field.Root,
+          destFolderRoot);
+      string newProjFolderB = Path.GetDirectoryName (newProjPathB)!;
+
+      string affectedProjPathC = field.Project (PROJ_C_LIB_APP);
+
+      string affectedSolutionPath = field.Solution (SLN_SOL_APP);
+
+      var parameters = TestParametersFactory.MoveMultiProjects (
+             field,
+             field.Root,
+             destFolderRoot,
+             svn);
+
+      var decisionProvider = new ScriptedDecisionProvider (
+              new Dictionary<string, ProjectUserDecision> {
+                [projNameA] = new ProjectUserDecision (
+                    Include: true,
+                    NewProjectName: null,
+                    NewProjectFolder: null,
+                    NewAssemblyName: null,
+                    SelectedSolutions: null,
+                    SelectedDependentProjectRoots: null
+                  ),
+              });
+
+      CapturingCallbackSink callbackSink = new ();
+
+      // Act
+
+      var mover = new CsProjectMover (
+        new NullProgressSink (),
+        callbackSink,
+        decisionProvider
+      );
+
+      // we run twice to verify that the second run does not cause issues
+      // such as trying to move already moved projects or similar problems with stale state
+
+      // 1st run with only A_LIB_CORE selected
+      await mover.RunAsync (parameters, CancellationToken.None);
+
+      // Assert callback confirmation message for 1st run
+
+      AssertConfirmationMessage (
+        callbackSink.Messages,
+        expectedProjectPaths:
+        [
+            oldProjPathA,
+            oldProjPathB,
+            affectedProjPathC,
+            field.Project(PROJ_D_LIB_PLUGIN),
+            field.Project(PROJ_E_LIB_WITH_LINKS),
+            field.Project(PROJ_F_SHARED_APP),
+            field.Project(PROJ_G_MIXED_APP),
+        ],
+        expectedSolutionPaths:
+        [
+            affectedSolutionPath,
+            field.Solution(SLN_SOL_CORE),
+            field.Solution(SLN_SOL_LINKS),
+            field.Solution(SLN_SOL_MIXED),
+            field.Solution(SLN_SOL_PLUGIN),
+            field.Solution(SLN_SOL_SHARED),
+        ]);
+
+      // 2nd run with only B_LIB_UTIL selected
+      decisionProvider.Decisions.Clear();
+      decisionProvider.Decisions[projNameB] = new ProjectUserDecision (
+                    Include: true,
+                    NewProjectName: null,
+                    NewProjectFolder: null,
+                    NewAssemblyName: null,
+                    SelectedSolutions: null,
+                    SelectedDependentProjectRoots: null
+                  );
+
+      await mover.RunAsync (parameters, CancellationToken.None);
+
+      // Assert callback confirmation message for 2nd run
+
+      AssertConfirmationMessage (
+        callbackSink.Messages,
+        expectedProjectPaths:
+        [
+            oldProjPathB,
+            affectedProjPathC,
+            field.Project(PROJ_G_MIXED_APP),
+        ],
+        expectedSolutionPaths:
+        [
+            affectedSolutionPath,
+            field.Solution(SLN_SOL_MIXED),
+            field.Solution(SLN_SOL_PLUGIN),
+        ]);
+
+      // Assert results for both runs together
+
+      // Layer 1 - file system
+
+      AssertDestinationRootExists (destFolderRoot);
+
+      AssertNewProjectFolderExists (newProjFolderA);
+      AssertNewProjectFolderExists (newProjFolderB);
+
+      AssertNewProjectFileExists (newProjPathA);
+      AssertNewProjectFileExists (newProjPathB);
+
+      AssertOriginalProjectFileDoesNotExist (oldProjPathA);
+      AssertOriginalProjectFileDoesNotExist (oldProjPathB);
+
+      AssertExactlyOneCsProjectFileInFolder (newProjFolderA);
+      AssertExactlyOneCsProjectFileInFolder (newProjFolderB);
+
+
+      // Layer 2 – projects
+
+      AssertProjectXmlLoads (newProjPathA);
+      AssertAllIncludesAreRelative (newProjPathA);
+      AssertProjectXmlLoads (newProjPathB);
+      AssertAllIncludesAreRelative (newProjPathB);
+
+      AssertProjectReference (
+          affectedProjPathC,
+          expectedReferencedProjectAbsPath: newProjPathA,
+          forbiddenReferencedProjectAbsPath: oldProjPathA);
+      AssertProjectReference (
+          affectedProjPathC,
+          expectedReferencedProjectAbsPath: newProjPathB,
+          forbiddenReferencedProjectAbsPath: oldProjPathB);
+
+      // Layer 3 – solution
+
+      List<string> expectedProjectPathsInSolution = [
+        newProjPathA,
+        affectedProjPathC,
+        field.Project(PROJ_C_LIB_APP),
+        field.Project(PROJ_Z_LIB_STD)
+      ];
+      await AssertSolutionProjectPathsAsync (affectedSolutionPath, expectedProjectPathsInSolution);
+
+      // Layer 4 – build
+
+      await BuildSolutionsAsync (field);
+    }
+
+    public static async Task Move06_09_Rename_ALibCore (     
       TestFieldFixture field, 
       bool setNewProjectName,
       bool setNewProjectFolder,
@@ -485,9 +648,9 @@ namespace ProjectMover.Tests.Integration {
       string oldProjPathA = field.Project (projFileA);
 
       string? intermediateParentDir = Path.GetDirectoryName (oldProjPathA) ?? 
-        throw new InvalidOperationException ($"{nameof(oldProjPathA)} does not have a parent directory.");
+        throw new InvalidOperationException ($"'{oldProjPathA}' does not have a parent directory.");
       string? destFolderRoot = Path.GetDirectoryName (intermediateParentDir) ?? 
-        throw new InvalidOperationException ($"Expected dest folder root {nameof (oldProjPathA)} does not exist");
+        throw new InvalidOperationException ($"Expected dest folder root '{oldProjPathA}' does not exist");
       
       const string RENAMED = "_renamed";
       
@@ -606,7 +769,20 @@ namespace ProjectMover.Tests.Integration {
       await BuildSolutionAsync (affectedSolutionPath);
     }
 
+    internal static async Task BuildSolutionsAsync (TestFieldFixture field) {
+      string[] solutions = [
+        field.Solution(SLN_SOL_APP),
+        field.Solution(SLN_SOL_CORE),
+        field.Solution(SLN_SOL_LINKS),
+        field.Solution(SLN_SOL_MIXED),
+        field.Solution(SLN_SOL_PLUGIN),
+        field.Solution(SLN_SOL_SHARED)
+      ]; 
 
+      foreach (string solution in solutions)
+        await BuildSolutionAsync (solution);
+
+    }
   }
 }
 

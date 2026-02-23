@@ -53,10 +53,9 @@ Beyond the obvious `.csproj` file and its containing folder, projects will be re
 - Supports **SDK-style projects**
 - Works with mixed project layouts
 
-### Safe Folder Selection
-- Assists users in selecting valid target directories
-- Automatically resolves invalid or non-existent paths
-- Prevents accidental use of stale or unrelated folders
+### Project and Solution Interdependencies 
+- Discovers direct and indirect project interdependencies.   
+- Discovers cascading dependencies in affected solutions.
 
 ### Windows Desktop UI
 - Built as a **Windows Forms application**
@@ -98,7 +97,7 @@ Beyond the obvious `.csproj` file and its containing folder, projects will be re
 
 - **Operating System:** Windows
 - **Framework:** .NET (Windows Forms), currently .Net 8
-- **Target Audience:** Developers working with C#/.NET projects and Visual Studio or Visual 
+- **Target Audience:** Developers working with C#/.NET projects and Visual Studio or Visual Studio Code
 - **Version Control:** A shell-accessible Subversion (SVN) command-line client must be installed and available on the system path
 
 
@@ -107,7 +106,7 @@ Beyond the obvious `.csproj` file and its containing folder, projects will be re
 ## Download
 Windows setup package:
 
-**[CsProjectMover-1.0.0-Setup.exe](https://github.com/MemoTrap/CsProjectMover/releases/download/v1.0.0/CsProjectMover-1.0.0-Setup.exe)**
+**[CsProjectMover-1.1.0-Setup.exe](https://github.com/MemoTrap/CsProjectMover/releases/download/v1.1.0/CsProjectMover-1.1.0-Setup.exe)**
 
 
 ### Automatic Updates

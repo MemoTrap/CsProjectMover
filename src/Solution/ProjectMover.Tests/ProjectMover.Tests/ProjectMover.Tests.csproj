@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
@@ -7,8 +7,8 @@
     <Nullable>enable</Nullable>
     <Company>MemoTrap</Company>
     <Copyright>Copyright © 2026 - $([System.DateTime]::UtcNow.Year) MemoTrap ($([System.DateTime]::UtcNow.ToString("s")))</Copyright>
-    <AssemblyVersion>1.0.0.0</AssemblyVersion>
-    <FileVersion>1.0.0.0</FileVersion>
+    <AssemblyVersion>1.1.0.0</AssemblyVersion>
+    <FileVersion>1.1.0.0</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -17,7 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\ProjectMover.Lib\ProjectMover.Lib.csproj" />
+    <ProjectReference Include="..\..\ProjectMover.Libs\ProjectMover.Lib\ProjectMover.Lib.csproj" />
   </ItemGroup>
 
   <ItemGroup>

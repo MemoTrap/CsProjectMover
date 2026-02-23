@@ -2,7 +2,7 @@
 
 **C# Project Mover** is a Windows desktop utility for moving or copying C#/.NET projects while preserving references in solutions and dependent projects. This guide walks through the typical workflow using the Windows Forms interface.
 
-There will also be *Tool Tips* in all dialogs as additional help.  
+There will also be *Tool Tips* in all dialogs for additional help.  
 
 ---
 
@@ -31,11 +31,11 @@ The main window displays the following key options:
 
 ## 2. Selecting Root and Target Folders
 
-- **Root folder**: Choose the top-level folder containing the projects to be moved or copied.
-- **Paths relative to root folder / Absolute paths**: Choose whether project paths in the operation should remain relative or be converted to absolute paths.
-- **Root folder for projects**: Specify the starting folder for project discovery. Alternatively, specify the single project to process.
-- **Destination folder**: Choose where the projects will be copied or moved.
-- **Root folder for solutions**: Optionally specify the starting folder for solution discovery. Click *Rescan* to refresh the list for a new run.
+- **Root folder**: Choose the top-level folder containing any projects to be moved or copied and any solutions that can be affected. 
+- **Paths relative to root folder / Absolute paths**: Choose whether project and solution paths in the operation should be shown as relative or as full absolute paths. *(Will not affect the operations themselves.)*
+- **Root folder for projects**: Specify the top folder for project discovery. Alternatively, specify the single project to process.
+- **Destination folder**: Choose the folder root where the projects will be copied or moved to.
+- **Root folder for solutions**: Optionally specify the top folder for solution discovery. Click *Rescan* to refresh the list for a new run.
 
 **Recursion Depth:** Limits how deeply ProjectMover searches for nested projects within the projects root folder.
 
@@ -67,28 +67,41 @@ Buttons:
 ![](detailswnd.png?raw=true)
 
 - **Current project folder**: The original location of the project.
-- **New project folder**: The target location where the project will be moved or copied.
+- **New project folder**: Customizable target location where the project will be moved or copied to.
 - **Project name** Optionally override the project name. 
 - **New assembly name**: Optionally override the assembly name. *(**Note:** A copied project typically requires a new unique assembly name. C# Project Mover creates a default timestamp-based placeholder for this.)*
 
 - **Sync buttons** can align project name and project folder name or project name and assembly name.
+
+In **Copy** mode additional check lists may be displayed. They show the directly dependent projects and solutions. Any selected project or solution in these lists will use the copied project.   
+
+Besides the direct dependencies, there can be indirect dependencies, affecting other projects and solutions. C# Project Mover resolves these indirect dependencies and adds them to the affected projects and solutions.
 
 - **Dependent project roots**: Lists other projects that reference the current project, which can be selected to be affected. Check boxes for the projects that should update their references automatically. *(**Copy** mode only)*
 - **Other related solutions**: Lists solutions that reference the project, which can be selected to be affected. *(**Copy** mode only)*
 
 Buttons:
 - **OK** — Apply changes and continue to the next project.
-- **Skip** — Skip this project without changes.
+- **Skip** — Skip this project from the operation *(i.e. do not move/rename or copy it)*.
 - **Cancel** — Abort the operation.
 
+C# Project Mover checks the decision details. If it finds a potential problem, it will reopen the **Copy / Move Details dialog** with a reason message, and the fields preset with the previous replies.  
+
+If indirect dependencies are discovered *(**Copy** mode only)*, these will be shown in an extra message box for each edited project:
+
+![](projconfirmbox.png?raw=true)
+
+A **No** reply here will restart the user selection procedure, with fields in each dialog preset with the previous replies.  
+
+***Note**: Project and solution interdependencies may not be as obvious as expected. If in doubt, examine the listed projects and solutions in VisualStudio before continuing.* 
 
 ## 5. Final confirmation
 
-Before executing, **C# Project Mover** shows a message box with a summary of affected projects and solutions. 
+Before executing the user decisions, **C# Project Mover** shows a message box with a summary of affected projects and solutions, as concluding confirmation. 
 
 ![](confirmbox.png?raw=true)
 
-The lists include both implicitly selected (as dependencies) and explicitly selected projects and solutions, for a final review.   
+The lists include both explicitly selected and implicitly affected (as dependencies)  projects and solutions, for a final review.   
 
 ---
 

@@ -5,6 +5,7 @@
 
 using System.Xml.Linq;
 
+using ProjectMover.Global.Lib;
 using ProjectMover.Lib.Models;
 using ProjectMover.Lib.Processes;
 using ProjectMover.Lib.Svn;
@@ -111,10 +112,22 @@ namespace ProjectMover.Tests {
           $"Destination root does not exist: {destinationRoot}");
     }
 
+    public static void AssertNewProjectFolderExists (IEnumerable<string> newProjectFolderSegments) =>
+      AssertNewProjectFolderExists (newProjectFolderSegments.JoinPath ());
+    
     public static void AssertNewProjectFolderExists (string newProjectFolder) {
       Assert.IsTrue (
           Directory.Exists (newProjectFolder),
           $"New project folder does not exist: {newProjectFolder}");
+    }
+    
+    public static void AssertUnwantedNewProjectFolderDoesNotExist (IEnumerable<string> newProjectFolderSegments) =>
+      AssertUnwantedNewProjectFolderDoesNotExist (newProjectFolderSegments.JoinPath ());
+    
+    public static void AssertUnwantedNewProjectFolderDoesNotExist (string newProjectFolder) {
+      Assert.IsFalse (
+          Directory.Exists (newProjectFolder),
+          $"Unwanted project folder exists: {newProjectFolder}");
     }
 
     public static void AssertNewProjectFileExists (string newProjectFile) {
@@ -422,12 +435,12 @@ namespace ProjectMover.Tests {
 
     private static void requireDir (string path) {
       if (!Directory.Exists (path))
-        throw new InvalidOperationException ($"Missing dir: {path}");
+        throw new InvalidOperationException ($"Missing dir: '{path}'");
     }
 
     private static void requireFile (string path) {
       if (!File.Exists (path))
-        throw new InvalidOperationException ($"Missing file: {path}");
+        throw new InvalidOperationException ($"Missing file: '{path}'");
     }
 
     private static string createTestRootDirectory () {
@@ -481,7 +494,7 @@ namespace ProjectMover.Tests {
         ct);
 
       if (!info.IsSuccess)
-        throw new InvalidOperationException ("Playground root is not an SVN working copy.");
+        throw new InvalidOperationException ($"Playground root is not an SVN working copy '{playgroundRoot}'.");
 
 
       // 2. If test field not yet present: svn copy + commit
@@ -525,7 +538,7 @@ namespace ProjectMover.Tests {
     private static string getRepoTestFieldPath (string sourceSubfolder, DirectoryInfo repoRootDir) {
       string sourceDir = Path.Combine (repoRootDir.FullName, TEST_FIELDS, sourceSubfolder);
       if (!Directory.Exists (sourceDir))
-        throw new InvalidOperationException ("Repo root not found.");
+        throw new InvalidOperationException ($"Repo root not found '{sourceDir}'.");
       return sourceDir;
     }         
 
@@ -548,7 +561,7 @@ namespace ProjectMover.Tests {
         dir = dir.Parent;
       }
 
-      throw new InvalidOperationException ("Repo root not found.");
+      throw new InvalidOperationException ($"Repo root not found '{dir}'.");
 
     }
 

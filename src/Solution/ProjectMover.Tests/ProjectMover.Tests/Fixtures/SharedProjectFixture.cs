@@ -118,7 +118,7 @@ namespace ProjectMover.Tests {
                  e.Name.LocalName is "SharedGUID" or "ProjectGuid");
 
       if (guidElement is null || string.IsNullOrWhiteSpace (guidElement.Value))
-        throw new AssertFailedException ($"No ProjectGuid or SharedGUID in {projPath}");
+        throw new AssertFailedException ($"No ProjectGuid or SharedGUID in '{projPath}'");
 
       return Guid.Parse (guidElement.Value);
     }

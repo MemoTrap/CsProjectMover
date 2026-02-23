@@ -21,13 +21,18 @@
     }
 
     [TestMethod]
-    public async Task CopySvn01_ALibCore_updates_BLibUtil_reference () {
-      await CopyProjectTestsCommon.Copy01_ALibCore (_field, USE_SVN);
+    public async Task CopySvn01_BLibUtil_updates_SolPlugin () {
+      await CopyProjectTestsCommon.Copy01_BLibUtil (_field, USE_SVN);
     }
 
     [TestMethod]
-    public async Task CopySvn02_SSharedStuff_updates_FSharedApp_reference () {
-      await CopyProjectTestsCommon.Copy02_SSharedStuff (_field, USE_SVN);
+    public async Task CopySvn02_ALibCore_updates_CLibApp_reference () {
+      await CopyProjectTestsCommon.Copy02_ALibCore (_field, USE_SVN);
+    }
+
+    [TestMethod]
+    public async Task CopySvn03_SSharedStuff_updates_FSharedApp_reference () {
+      await CopyProjectTestsCommon.Copy03_SSharedStuff (_field, USE_SVN);
     }
   }
 }

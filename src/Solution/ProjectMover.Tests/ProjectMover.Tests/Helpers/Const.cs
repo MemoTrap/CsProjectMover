@@ -29,12 +29,19 @@ namespace ProjectMover.Tests {
     public const string PROJ_Z_LIB_STD = Z_LIB_STD + CSPROJ;
 
 
-    public const string SLN_SOL_APP = "SolApp" + SLN;
-    public const string SLN_SOL_CORE = "SolCore" + SLN;
-    public const string SLN_SOL_LINKS = "SolLinks" + SLN;
-    public const string SLN_SOL_MIXED = "SolMixed" + SLN;
-    public const string SLN_SOL_PLUGIN = "SolPlugin" + SLN;
-    public const string SLN_SOL_SHARED = "SolShared" + SLN;
+    public const string SOL_APP = "SolApp";
+    public const string SOL_CORE = "SolCore";
+    public const string SOL_LINKS = "SolLinks";
+    public const string SOL_MIXED = "SolMixed";
+    public const string SOL_PLUGIN = "SolPlugin";
+    public const string SOL_SHARED = "SolShared";
+    
+    public const string SLN_SOL_APP = SOL_APP + SLN;
+    public const string SLN_SOL_CORE = SOL_CORE + SLN;
+    public const string SLN_SOL_LINKS = SOL_LINKS + SLN;
+    public const string SLN_SOL_MIXED = SOL_MIXED + SLN;
+    public const string SLN_SOL_PLUGIN = SOL_PLUGIN + SLN;
+    public const string SLN_SOL_SHARED = SOL_SHARED + SLN;
 
     public const string RELOCATED = "Relocated";
     public const string COPY = ".Copy";
@@ -60,7 +67,9 @@ namespace ProjectMover.Tests {
     
     public const string SLN_APPLICATION = APPLICATION + SLN;
 
-    public const string PROJ_CLIENT_CONSOLE_APP = "ClientConsoleApp" + CSPROJ;
+    public const string CLIENT_CONSOLE_APP = "ClientConsoleApp";
+
+    public const string PROJ_CLIENT_CONSOLE_APP = CLIENT_CONSOLE_APP + CSPROJ;
     public const string PROJ_CLIENT_GUI_APP = "ClientGuiApp" + CSPROJ;
     public const string PROJ_CLIENT_LIB = "ClientLib" + CSPROJ;
     public const string PROJ_CLIENT_PROXY = "ClientProxy" + CSPROJ;

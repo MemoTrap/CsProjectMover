@@ -1,5 +1,5 @@
 #define MyAppSetupName 'C# Project Mover'
-#define MyAppVersion '1.0.0'
+#define MyAppVersion '1.1.0'
 #define MyProgramExe = 'C# Project Mover.exe'
 #define MyCompany = 'MemoTrap'
 #define MyAppName = 'CsProjectMover'
@@ -18,7 +18,7 @@ OutputBaseFilename={#MyAppName}-{#MyAppVersion}-Setup
 DefaultGroupName={#MyCompany}
 DefaultDirName={autopf}\{#MyCompany}\{#MyAppSetupName}
 UninstallDisplayIcon={app}\{#MyProgramExe}
-SourceDir=..\Solution\ProjectMover.Gui.App\bin\Release\net8.0-windows\publish\win-x64
+SourceDir=..\Solution\ProjectMover.Apps\\ProjectMover.Gui.App\bin\Release\net8.0-windows\publish\win-x64
 OutputDir=..\..\..\Setup
 SolidCompression=yes
 

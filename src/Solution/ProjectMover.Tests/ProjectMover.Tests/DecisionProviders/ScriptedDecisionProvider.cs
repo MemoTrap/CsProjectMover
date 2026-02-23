@@ -15,7 +15,13 @@ namespace ProjectMover.Tests {
   ) : IProjectDecisionProvider {
 
     private readonly Dictionary<string, ProjectUserDecision> _decisions = decisionsByProjectName;
-    public Dictionary<string, ContextWithDecision> LoggedContextDecisionsByProjectName { get; } = [];
+    
+    public Dictionary<string, ProjectUserDecision> Decisions => _decisions;
+
+    public Dictionary<string, ContextWithDecision> LoggedContextDecisionsByProjectName { get; }
+      = [];
+    
+    public IEnumerable<string>? PreSelect (IEnumerable<string> projectPaths, int[]? preset) => null;
 
     public ProjectUserDecision Decide (ProjectDecisionContext context) {
       ProjectUserDecision? decision = null;
@@ -36,6 +42,5 @@ namespace ProjectMover.Tests {
       return decision;
     }
 
-    public IEnumerable<string>? PreSelect (IEnumerable<string> projectPaths) => null;
   }
 }

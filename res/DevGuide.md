@@ -45,7 +45,9 @@ Typical structure:
 - /src
 - /src/InnoSetup
 - /src/Solution
-- /src/Solution/(app projects)
+- /src/Solution/Auxiliary
+- /src/Solution/ProjectMover.Apps
+- /src/Solution/ProjectMover.Libs
 - /src/Solution/ProjectMover.Tests
 - /src/TestFields
 

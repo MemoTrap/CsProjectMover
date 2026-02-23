@@ -27,14 +27,32 @@ namespace ProjectMover.Tests.Integration {
     }
 
     [TestMethod]
-    public async Task CopySvn01_RpcAppTemplate () {
+    public async Task CopySvn01_RpcAppTemplate_Narrow () {
       // Arrange
 
       string projectFolder = Path.Combine (_field.Root, RPC_APP_TEMPLATE);
       string destinationFolder = Path.Combine (_field.Root, APPLICATION);
       string solutionFolder = destinationFolder;
 
-      // Get them before the act, as thew will exist twice after the copy 
+      await copyRpcAppTemplate (projectFolder, destinationFolder, solutionFolder);
+    }
+
+    [TestMethod]
+    public async Task CopySvn02_RpcAppTemplate_Broad () {
+      // Arrange
+
+      string projectFolder = _field.Root;
+      string destinationFolder = Path.Combine (_field.Root, APPLICATION);
+      string solutionFolder = _field.Root;
+
+      await copyRpcAppTemplate (projectFolder, destinationFolder, solutionFolder);
+    }
+
+    private async Task copyRpcAppTemplate (string projectFolder, string destinationFolder, string solutionFolder) {
+      // Arrange
+      string FirstDestFolder = Path.Combine (destinationFolder, CLIENT, CLIENT_CONSOLE_APP);
+
+      // Get them before the act, as they will exist twice after the copy 
       string[] origProjectPaths =
       [
           _field.Project (PROJ_CLIENT_CONSOLE_APP),
@@ -66,10 +84,19 @@ namespace ProjectMover.Tests.Integration {
              projectFolder,
              destinationFolder,
              solutionFolder,
+             true,
              true);
 
       var decisionProvider = new ScriptedDecisionProvider (
               new Dictionary<string, ProjectUserDecision> {
+                [CLIENT_CONSOLE_APP] = new ProjectUserDecision (
+                    Include: true,
+                    NewProjectName: null,
+                    NewProjectFolder: FirstDestFolder,
+                    NewAssemblyName: null,
+                    SelectedSolutions: [affectedSolutionPath],
+                    SelectedDependentProjectRoots: null
+                  ),
                 [WILDCARD] = new ProjectUserDecision (
                     Include: true,
                     NewProjectName: null,
@@ -99,8 +126,7 @@ namespace ProjectMover.Tests.Integration {
 
       AssertConfirmationMessage (
         callbackSink.Messages,
-        expectedProjectPaths:
-          origProjectPaths,
+        expectedProjectPaths: origProjectPaths,
         expectedSolutionPaths:
         [
             affectedSolutionPath
@@ -127,15 +153,19 @@ namespace ProjectMover.Tests.Integration {
       // we only get here if the paths exist
       foreach (string newProjPath in newProjectPaths) {
         AssertEqualSubFolderAndProjectName (newProjPath);
-        AssertExactlyOneCsProjectFileInFolder (Path.GetDirectoryName(newProjPath)!);
+        AssertExactlyOneCsProjectFileInFolder (Path.GetDirectoryName (newProjPath)!);
       }
 
       foreach (string origProjPath in origProjectPaths) {
         AssertOriginalProjectFileExists (origProjPath);
-        AssertExactlyOneCsProjectFileInFolder (Path.GetDirectoryName(origProjPath)!);
+        AssertExactlyOneCsProjectFileInFolder (Path.GetDirectoryName (origProjPath)!);
       }
 
-
+      // double check
+      AssertNewProjectFolderExists ([destinationFolder, CLIENT]);
+      AssertNewProjectFolderExists ([destinationFolder, COMMON]);
+      AssertNewProjectFolderExists ([destinationFolder, SERVER]);
+      AssertUnwantedNewProjectFolderDoesNotExist ([destinationFolder, RPC_APP_TEMPLATE]);
 
       // Layer 2 – projects
       foreach (string newProjPath in newProjectPaths) {
@@ -147,7 +177,7 @@ namespace ProjectMover.Tests.Integration {
             Path.GetFileNameWithoutExtension (newProjPath),
             out var contextWithDecision);
         Assert.IsNotNull (contextWithDecision, $"No decision logged for project '{newProjPath}'");
-        Assert.IsNotNull (contextWithDecision.Context.SuggestedAssemblyName, 
+        Assert.IsNotNull (contextWithDecision.Context.SuggestedAssemblyName,
           $"No new assembly name was suggested for project '{newProjPath}'");
         AssertAssemblyName (newProjPath, contextWithDecision.Context.SuggestedAssemblyName);
       }
@@ -155,7 +185,7 @@ namespace ProjectMover.Tests.Integration {
 
       // Layer 3 – solution
 
-      List<string> expectedProjectPathsInSolution = newProjectPaths.ToList (); 
+      List<string> expectedProjectPathsInSolution = newProjectPaths.ToList ();
       expectedProjectPathsInSolution.AddRange (expectedConstProjectPaths);
 
       await AssertSolutionProjectPathsAsync (affectedSolutionPath, expectedProjectPathsInSolution);
@@ -164,6 +194,5 @@ namespace ProjectMover.Tests.Integration {
 
       await BuildSolutionAsync (affectedSolutionPath);
     }
-
   }
 }

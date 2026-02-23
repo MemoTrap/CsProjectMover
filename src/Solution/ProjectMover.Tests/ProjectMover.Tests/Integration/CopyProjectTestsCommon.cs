@@ -3,14 +3,111 @@
 namespace ProjectMover.Tests.Integration {
   using ProjectMover.Lib;
 
-  using static ProjectMover.Tests.Const;
   using static ProjectMover.Tests.ConfirmationAssertions;
+  using static ProjectMover.Tests.Const;
+  using static ProjectMover.Tests.Integration.MoveProjectTestsCommon;
   using static ProjectMover.Tests.SharedProjectFixture;
   using static ProjectMover.Tests.TestFieldFixture;
 
   internal static class CopyProjectTestsCommon {
 
-    public static async Task Copy01_ALibCore (TestFieldFixture field, bool svn = false) {
+    public static async Task Copy01_BLibUtil (TestFieldFixture field, bool svn = false) {
+      
+      // Arrange
+
+      string oldProjNameB = B_LIB_UTIL;
+      string oldProjFileB = oldProjNameB + CSPROJ;
+      string oldProjPathB = field.Project (oldProjFileB);
+      
+      string destFolderRoot = Path.Combine (field.Root, RELOCATED);
+      
+      string newProjNameB = B_LIB_UTIL + COPY;
+      string newProjFileB = newProjNameB + CSPROJ;
+      string newProjFolderB = Path.Combine (destFolderRoot, newProjNameB);
+      string newProjPathB = Path.Combine (newProjFolderB, newProjFileB);
+      
+      //string affectedProjPathB = field.Project (PROJ_B_LIB_UTIL); 
+
+      string affectedSolutionPath = field.Solution (SLN_SOL_PLUGIN);
+
+      var parameters = TestParametersFactory.CopySingleProject (
+             field,
+             oldProjFileB,
+             destFolderRoot,
+             svn);
+
+      var decisionProvider = new ScriptedDecisionProvider (
+              new Dictionary<string, ProjectUserDecision> {
+                [oldProjNameB] = new ProjectUserDecision (
+                    Include: true,
+                    NewProjectName: newProjNameB,
+                    NewProjectFolder: newProjFolderB,
+                    NewAssemblyName: newProjNameB,
+                    SelectedSolutions: [affectedSolutionPath],
+                    SelectedDependentProjectRoots: null
+                  )
+              });
+
+      CapturingCallbackSink callbackSink = new ();
+
+      // Act
+
+      var mover = new CsProjectMover (
+        new NullProgressSink (),
+        callbackSink,
+        decisionProvider
+      );
+
+      await mover.RunAsync (parameters, CancellationToken.None);
+
+
+      // Assert
+
+      // Callback confirmation messages
+
+      AssertConfirmationMessage (
+        callbackSink.Messages,
+        expectedProjectPaths:
+        [
+            oldProjPathB,
+        ],
+        expectedSolutionPaths:
+        [
+            affectedSolutionPath,
+        ]);
+
+      // Layer 1 - file system
+
+      AssertDestinationRootExists (destFolderRoot);
+
+      AssertNewProjectFolderExists (newProjFolderB);
+
+      AssertNewProjectFileExists (newProjPathB);
+
+      AssertOriginalProjectFileExists (oldProjPathB);
+
+      AssertExactlyOneCsProjectFileInFolder (newProjFolderB);
+
+
+      // Layer 2 – projects
+
+      AssertProjectXmlLoads (newProjPathB);
+      AssertAssemblyName (newProjPathB, newProjNameB);
+      AssertAllIncludesAreRelative (newProjPathB);
+
+      // Layer 3 – solution
+
+      List<string> expectedProjectPathsInSolution = [ 
+        newProjPathB,
+      ];
+      await AssertSolutionProjectPathsAsync (affectedSolutionPath, expectedProjectPathsInSolution);
+
+      // Layer 4 – build
+
+      await BuildSolutionsAsync (field);
+    }
+
+    public static async Task Copy02_ALibCore (TestFieldFixture field, bool svn = false) {
       
       // Arrange
 
@@ -25,7 +122,7 @@ namespace ProjectMover.Tests.Integration {
       string newProjFolderA = Path.Combine (destFolderRoot, newProjNameA);
       string newProjPathA = Path.Combine (newProjFolderA, newProjFileA);
       
-      string affectedProjPathB = field.Project (PROJ_B_LIB_UTIL); 
+      string affectedProjPathC = field.Project (PROJ_C_LIB_APP); 
 
       string affectedSolutionPath = field.Solution (SLN_SOL_APP);
 
@@ -43,7 +140,7 @@ namespace ProjectMover.Tests.Integration {
                     NewProjectFolder: newProjFolderA,
                     NewAssemblyName: newProjNameA,
                     SelectedSolutions: null,
-                    SelectedDependentProjectRoots: [affectedProjPathB]
+                    SelectedDependentProjectRoots: [affectedProjPathC]
                   )
               });
 
@@ -69,13 +166,16 @@ namespace ProjectMover.Tests.Integration {
         expectedProjectPaths:
         [
             oldProjPathA,
-            affectedProjPathB,
+            affectedProjPathC,
+            field.Project(PROJ_B_LIB_UTIL),
+            field.Project(PROJ_D_LIB_PLUGIN),
+            field.Project(PROJ_E_LIB_WITH_LINKS),
             field.Project(PROJ_G_MIXED_APP),
-            field.Project(PROJ_C_LIB_APP),
         ],
         expectedSolutionPaths:
         [
-            affectedSolutionPath,
+            affectedSolutionPath, // = SolCore
+            field.Solution(SLN_SOL_LINKS),
             field.Solution(SLN_SOL_MIXED),
             field.Solution(SLN_SOL_PLUGIN),
         ]);
@@ -100,7 +200,7 @@ namespace ProjectMover.Tests.Integration {
       AssertAllIncludesAreRelative (newProjPathA);
 
       AssertProjectReference (
-          affectedProjPathB,
+          affectedProjPathC,
           expectedReferencedProjectAbsPath: newProjPathA,
           forbiddenReferencedProjectAbsPath: oldProjPathA);
 
@@ -108,7 +208,7 @@ namespace ProjectMover.Tests.Integration {
 
       List<string> expectedProjectPathsInSolution = [ 
         newProjPathA,
-        affectedProjPathB,
+        affectedProjPathC,
         field.Project(PROJ_C_LIB_APP),
         field.Project(PROJ_Z_LIB_STD)
       ];
@@ -116,10 +216,10 @@ namespace ProjectMover.Tests.Integration {
 
       // Layer 4 – build
 
-      await BuildSolutionAsync (affectedSolutionPath);
+      await BuildSolutionsAsync (field);
     }
 
-    public static async Task Copy02_SSharedStuff (TestFieldFixture field, bool svn = false) {
+    public static async Task Copy03_SSharedStuff (TestFieldFixture field, bool svn = false) {
       
       // Arrange
 
@@ -225,7 +325,7 @@ namespace ProjectMover.Tests.Integration {
 
       // Layer 4 – build
 
-      await BuildSolutionAsync (affectedSlnPathShared);
+      await BuildSolutionsAsync (field);
     }
   }
 }

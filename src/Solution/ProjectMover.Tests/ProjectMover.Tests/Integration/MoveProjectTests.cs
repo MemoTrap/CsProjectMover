@@ -39,23 +39,28 @@
     }
 
     [TestMethod]
-    public async Task Move05_Rename_ALibCore () {
-      await MoveProjectTestsCommon.Move05_08_Rename_ALibCore (_field, true, false);
+    public async Task Move05_ALibCore_BLibUtil_2ndRun () {
+      await MoveProjectTestsCommon.Move05_ALibCore_BLibUtil_2ndRun (_field);
     }
 
     [TestMethod]
-    public async Task Move06_Rename_ALibCoreFolderOnly () {
-      await MoveProjectTestsCommon.Move05_08_Rename_ALibCore (_field, false, true);
+    public async Task Move06_Rename_ALibCore () {
+      await MoveProjectTestsCommon.Move06_09_Rename_ALibCore (_field, true, false);
     }
 
     [TestMethod]
-    public async Task Move07_Rename_ALibCoreAndFolder () {
-      await MoveProjectTestsCommon.Move05_08_Rename_ALibCore (_field, true, true);
+    public async Task Move07_Rename_ALibCoreFolderOnly () {
+      await MoveProjectTestsCommon.Move06_09_Rename_ALibCore (_field, false, true);
     }
 
     [TestMethod]
-    public async Task Move08_Rename_ALibCoreNothing () {
-      await MoveProjectTestsCommon.Move05_08_Rename_ALibCore (_field, false, false);
+    public async Task Move08_Rename_ALibCoreAndFolder () {
+      await MoveProjectTestsCommon.Move06_09_Rename_ALibCore (_field, true, true);
+    }
+
+    [TestMethod]
+    public async Task Move09_Rename_ALibCoreNothing () {
+      await MoveProjectTestsCommon.Move06_09_Rename_ALibCore (_field, false, false);
     }
 
   }

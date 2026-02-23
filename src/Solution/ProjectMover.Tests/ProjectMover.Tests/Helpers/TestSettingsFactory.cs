@@ -63,6 +63,7 @@ namespace ProjectMover.Tests {
         string projectFolder,
         string destinationFolder,
         string solutionFolder,
+        bool absPaths = false,
         bool useSvn = false
     ) {
       return new Parameters {
@@ -72,7 +73,7 @@ namespace ProjectMover.Tests {
         DestinationFolder = destinationFolder,
         SolutionFolderOrFile = solutionFolder,
         Copy = true,
-        AbsPathsInUserCommunication = true,
+        AbsPathsInUserCommunication = absPaths,
         FileOperations = useSvn ? EFileOperations.Svn : EFileOperations.Direct
       };
     }

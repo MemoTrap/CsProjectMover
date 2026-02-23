@@ -42,23 +42,28 @@
     }
 
     [TestMethod]
-    public async Task MoveSvn05_Rename_ALibCore () {
-      await MoveProjectTestsCommon.Move05_08_Rename_ALibCore (_field, true, false, USE_SVN);
+    public async Task MoveSvn05_ALibCore_BLibUtil_2ndRun () {
+      await MoveProjectTestsCommon.Move05_ALibCore_BLibUtil_2ndRun (_field, USE_SVN);
     }
 
     [TestMethod]
-    public async Task MoveSvn06_Rename_ALibCoreFolderOnly () {
-      await MoveProjectTestsCommon.Move05_08_Rename_ALibCore (_field, false, true, USE_SVN);
+    public async Task MoveSvn06_Rename_ALibCore () {
+      await MoveProjectTestsCommon.Move06_09_Rename_ALibCore (_field, true, false, USE_SVN);
     }
 
     [TestMethod]
-    public async Task MoveSvn07_Rename_ALibCoreAndFolder () {
-      await MoveProjectTestsCommon.Move05_08_Rename_ALibCore (_field, true, true, USE_SVN);
+    public async Task MoveSvn07_Rename_ALibCoreFolderOnly () {
+      await MoveProjectTestsCommon.Move06_09_Rename_ALibCore (_field, false, true, USE_SVN);
     }
 
     [TestMethod]
-    public async Task MoveSvn08_Rename_ALibCoreNothing () {
-      await MoveProjectTestsCommon.Move05_08_Rename_ALibCore (_field, false, false, USE_SVN);
+    public async Task MoveSvn08_Rename_ALibCoreAndFolder () {
+      await MoveProjectTestsCommon.Move06_09_Rename_ALibCore (_field, true, true, USE_SVN);
+    }
+
+    [TestMethod]
+    public async Task MoveSvn09_Rename_ALibCoreNothing () {
+      await MoveProjectTestsCommon.Move06_09_Rename_ALibCore (_field, false, false, USE_SVN);
     }
 
 

@@ -52,12 +52,15 @@ namespace ProjectMover.Tests {
       if (matches.Count == 0)
         return null;
 
-      if (matches.Count > 1)
-        Assert.Fail (
-            "Multiple 'confirmation' messages found:\n\n" +
-            string.Join ("\n\n---\n\n", matches));
+      //if (matches.Count > 1)
+      //  Assert.Fail (
+      //      "Multiple 'confirmation' messages found:\n\n" +
+      //      string.Join ("\n\n---\n\n", matches));
 
-      return matches[0];
+      // For consecutive runs in the same test method,
+      // we may have multiple confirmation messages,
+      // but the last one is the relevant one (e.g. after retrying with different decisions)
+      return matches.Last();
     }
     
     private static string? findDoneMessage (IEnumerable<string> callbackMessages) {
