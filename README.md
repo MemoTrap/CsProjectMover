@@ -106,7 +106,7 @@ Beyond the obvious `.csproj` file and its containing folder, projects will be re
 ## Download
 Windows setup package:
 
-**[CsProjectMover-1.2.0-Setup.exe](https://github.com/MemoTrap/CsProjectMover/releases/download/v1.2.0/CsProjectMover-1.2.0-Setup.exe)**
+**[CsProjectMover-1.2.0.1-Setup.exe](https://github.com/MemoTrap/CsProjectMover/releases/download/v1.2.0.1/CsProjectMover-1.2.0.1-Setup.exe)**
 
 
 ### Automatic Updates

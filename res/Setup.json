@@ -1,10 +1,10 @@
 [
   {
-    "Url": "https://github.com/MemoTrap/CsProjectMover/releases/download/v1.2.0/CsProjectMover-1.2.0-Setup.exe",
+    "Url": "https://github.com/MemoTrap/CsProjectMover/releases/download/v1.2.0.1/CsProjectMover-1.2.0.1-Setup.exe",
     "AppName": "CsProjectMover",
-    "Version": "1.2.0",
+    "Version": "1.2.0.1",
     "Preview": false,
     "Descript": "Standalone utility to move or copy C# project files and folders",
-    "Md5": "F762AB0292C837EA6054EDABDA63271E"
+    "Md5": "F0A9F9324B73D2A6E80EAE2FAC3A77E4"
   }
 ]
