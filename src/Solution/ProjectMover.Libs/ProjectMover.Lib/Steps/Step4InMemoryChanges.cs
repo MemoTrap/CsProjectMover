@@ -4,22 +4,22 @@
     IProgressSink progress
   ) {
     public void Apply (
-      IReadOnlyDictionary<string, ProjectOperationPlan>? plans
+      IReadOnlyList<ProjectOperationPlan>? plans
     ) {
 
       if (plans is null)
-        throw new InvalidOperationException ("Proevt plas are null");
+        throw new InvalidOperationException ("Project plans are null");
       
       using var guard = new ResourceGuard (
         () => progress.BeginStep ("Step 4 of 5: Applying in-memory changes, " +
-          $"{plans.Values.Count()} projects ..."),
+          $"{plans.Count} projects ..."),
         () => progress.EndStep ("In-memory updates completed")
       );
-      progress.SetMax (plans.Values.Count());
+      progress.SetMax (plans.Count);
 
       int total = plans.Count;
       int index = 0;
-      foreach (var plan in plans.Values) {
+      foreach (var plan in plans) {
         index++;
         progress.Report ($"Apply to project {index} of {total}: {plan.Project.AbsolutePath.ToParaPath (parameters)}");
         progress.ReportRel ();

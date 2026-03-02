@@ -1,4 +1,6 @@
-﻿namespace ProjectMover.Lib.Models {
+﻿using ProjectMover.Lib.Helpers;
+
+namespace ProjectMover.Lib.Models {
   internal class SharedProjectFile (string projectFilePath) : ProjectFile(projectFilePath, EXT) {
     public const string EXT = ".shproj";
     public const string PROJITEMS_EXT = ".projitems";

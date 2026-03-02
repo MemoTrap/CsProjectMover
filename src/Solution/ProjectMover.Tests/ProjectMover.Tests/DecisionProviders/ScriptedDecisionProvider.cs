@@ -21,7 +21,7 @@ namespace ProjectMover.Tests {
     public Dictionary<string, ContextWithDecision> LoggedContextDecisionsByProjectName { get; }
       = [];
     
-    public IEnumerable<string>? PreSelect (IEnumerable<string> projectPaths, int[]? preset) => null;
+    //public IEnumerable<string>? PreSelect (IEnumerable<string> projectPaths, int[]? preset) => null;
 
     public ProjectUserDecision Decide (ProjectDecisionContext context) {
       ProjectUserDecision? decision = null;

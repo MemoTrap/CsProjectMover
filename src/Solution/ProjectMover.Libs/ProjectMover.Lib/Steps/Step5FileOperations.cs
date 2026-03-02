@@ -14,12 +14,12 @@
 
       using var gd = new ResourceGuard (
         () => progress.BeginStep ("Step 5 of 5: Executing file operations," +
-          $" {plans.ProjectPlans.Values.Count()} projects /" +
-          $" {plans.SolutionPlans.Values.Count()} solutions ..."),
+          $" {plans.ProjectPlans.Count} projects /" +
+          $" {plans.SolutionPlans.Count} solutions ..."),
         () => progress.EndStep ("File operations completed")
       );
-      int max = plans.ProjectPlans.Values.Count() * 3 +
-                plans.SolutionPlans.Values.Count();
+      int max = plans.ProjectPlans.Count * 3 +
+                plans.SolutionPlans.Count;
       progress.SetMax (max);
 
       ct.ThrowIfCancellationRequested ();
@@ -28,15 +28,15 @@
         await FileOperationContextFactory.CreateWithDryRunAwarenessAsync (parameters, ct);
       ctx.MarkCompleted (false);
 
-      await createDirectories (ctx, plans.ProjectPlans.Values, ct);
+      await createDirectories (ctx, plans.ProjectPlans, ct);
 
       if (parameters.Copy)
-        await copyProjectsAsync (ctx, plans.ProjectPlans.Values, ct);
+        await copyProjectsAsync (ctx, plans.ProjectPlans, ct);
       else
-        await moveProjectsAsync (ctx, plans.ProjectPlans.Values, ct);
+        await moveProjectsAsync (ctx, plans.ProjectPlans, ct);
 
-      await writeProjectsAsync (ctx, plans.ProjectPlans.Values, ct);
-      await writeSolutionsAsync (ctx, plans.SolutionPlans.Values, ct);
+      await writeProjectsAsync (ctx, plans.ProjectPlans, ct);
+      await writeSolutionsAsync (ctx, plans.SolutionPlans, ct);
 
       ctx.MarkCompleted ();
     }

@@ -1,4 +1,4 @@
-﻿namespace ProjectMover.Lib.Misc {
+﻿namespace ProjectMover.Lib.Helpers {
   internal abstract class OperationPlan (FileBase fileBase) {
     public string AbsolutePath { get; } = fileBase.OrigAbsPath;
   }
@@ -10,6 +10,7 @@
     public bool Included { get; set; }
 
     public bool IsUserSelected { get; set; }
+    public bool IsUserAppliedDependency { get; set; }
     public bool IsDependency { get; set; }
     public bool IsCopyGroupDependency { get; set; }
 
@@ -30,6 +31,8 @@
       if (verbose) {
         if (IsUserSelected)
           sb.Append ("selected");
+        if (IsUserAppliedDependency)
+          sb.Append ("applied");
         if (IsDependency) {
           if (sb.Length > 0)
             sb.Append (", ");
@@ -44,21 +47,23 @@
       } else {
         if (IsUserSelected)
           sb.Append (" (selected)");
-        return sb.ToString();
+        else if (IsUserAppliedDependency) 
+          sb.Append (" (applied)");
+        return sb.ToString ();
       }
     }
   }
 
   internal sealed class SolutionOperationPlan (SolutionFile solution) : OperationPlan(solution){
     public SolutionFile Solution { get; } = solution;
-    public bool IsUserSelected { get; set; }
+    public bool IsUserAppliedDependency { get; set; }
 
     public HashSet<ProjectFile> AffectedProjects { get; } = [];
 
 
     public string AffectionKindToString () {
-      if (IsUserSelected)
-        return " (selected)";
+      if (IsUserAppliedDependency)
+        return " (applied)";
       else 
         return string.Empty;
     }

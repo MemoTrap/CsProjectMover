@@ -2,8 +2,8 @@
 
 namespace ProjectMover.Tests.Unit {
   using static Const;
-  using ProjectMover.Lib.Misc;
   using ProjectMover.Lib.Models;
+  using ProjectMover.Lib.Helpers;
 
   [TestClass]
   public sealed class Tests01_ProjectDependencyGraphBuilder {

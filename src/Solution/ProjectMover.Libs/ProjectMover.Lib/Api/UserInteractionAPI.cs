@@ -31,7 +31,7 @@
   );
 
   public interface IProjectDecisionProvider {
-    IEnumerable<string>? PreSelect (IEnumerable<string> projectPaths, int[]? preset);
+    IEnumerable<string>? PreSelect (IEnumerable<string> projectPaths, int[]? preset) => null;
     ProjectUserDecision Decide (ProjectDecisionContext context);
   }
 

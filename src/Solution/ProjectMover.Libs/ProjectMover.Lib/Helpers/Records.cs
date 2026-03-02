@@ -1,4 +1,4 @@
-﻿namespace ProjectMover.Lib.Misc {
+﻿namespace ProjectMover.Lib.Helpers {
   internal sealed record DependentSolutionsAndProjects (
     IReadOnlyList<SolutionFile> Solutions,
     IReadOnlyList<ProjectFile> Projects
@@ -18,8 +18,8 @@
   );
 
   internal sealed record ProjectAndSolutionPlans (
-    IReadOnlyDictionary<string, ProjectOperationPlan> ProjectPlans,
-    IReadOnlyDictionary<string, SolutionOperationPlan> SolutionPlans
+    IReadOnlyList<ProjectOperationPlan> ProjectPlans,
+    IReadOnlyList<SolutionOperationPlan> SolutionPlans
   );
   
 }

@@ -7,6 +7,8 @@
 
 using System.Text.RegularExpressions;
 
+using ProjectMover.Lib.Helpers;
+
 namespace ProjectMover.Lib.Models {
 
   internal class SolutionFile (string filePath) : FileBase (filePath, EXT) {
@@ -134,7 +136,7 @@ namespace ProjectMover.Lib.Models {
         @"^(?<indent>\s*)\{(?<child>[0-9A-Fa-f\-]+)\}\s*=\s*\{(?<parent>[0-9A-Fa-f\-]+)\}",
         RegexOptions.Compiled);
       
-      public static NestedProjectLine? TryParse (string textLine, SolutionFile sln) {
+      public static NestedProjectLine? TryParse (string textLine, SolutionFile _) {
 
         Match m = regex.Match (textLine);
         if (!m.Success)
@@ -163,7 +165,7 @@ namespace ProjectMover.Lib.Models {
         @"^(?<indent>\s+)\{(?<projectGuid>[A-Fa-f0-9\-]+)\}\.(?<key>[^=]+)(?<after>\s*=\s*.+)$",
         RegexOptions.Compiled);
 
-      public static ProjectConfigurationPlatformLine? TryParse (string textLine, SolutionFile sln) {
+      public static ProjectConfigurationPlatformLine? TryParse (string textLine, SolutionFile _) {
 
         Match m = regex.Match (textLine);
         if (!m.Success)
@@ -199,7 +201,7 @@ namespace ProjectMover.Lib.Models {
         @"^(?<indent>\s+)(?<keyword>GlobalSection)\((?<kind>[^)]+)\)(?<after>\s*=\s*\w+.*)$",
         RegexOptions.Compiled);
 
-      public static GlobalSectionLine? TryParse (string textLine, SolutionFile sln) {
+      public static GlobalSectionLine? TryParse (string textLine, SolutionFile _) {
 
         Match m = regex.Match (textLine);
         if (!m.Success)

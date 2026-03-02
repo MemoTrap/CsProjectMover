@@ -16,6 +16,41 @@
       return value!;
     }
 
+    public static TValue GetOrAdd<TKey, TValue>(
+      this Dictionary<TKey, TValue> dict,
+      TKey key,
+      TValue value = default
+    ) where TKey : notnull
+      where TValue : struct {
+      dict[key] = value;
+      return value!;
+    }
+
+    /// <summary>
+    /// Updates the dictionary entry for the specified key with the given value, 
+    /// or adds the key with its default value if the value is default.
+    /// </summary>
+    /// <typeparam name="TKey">The type of keys in the dictionary.</typeparam>
+    /// <typeparam name="TValue">The value type of the dictionary, which must be a struct.</typeparam>
+    /// <param name="dict">The dictionary to update.</param>
+    /// <param name="key">The key whose value should be updated or added.</param>
+    /// <param name="value">The value to set for the specified key, or default to add the key with its default value.</param>
+    public static void AddOrUpdate<TKey, TValue>(
+      this Dictionary<TKey, TValue> dict,
+      TKey key,
+      TValue value = default
+    ) where TKey : notnull
+      where TValue : struct {
+      if (value.IsDefault ())
+        dict.GetOrAdd (key);
+      else 
+        dict[key] = value;
+    }
+
+    public static bool IsDefault<T> (this T value) where T : struct {
+      return EqualityComparer<T>.Default.Equals (value, default);
+    }
+
     public static async Task<TValue> GetOrAddAsync<TKey, TValue>(
       this Dictionary<TKey, TValue> dict,
       TKey key,

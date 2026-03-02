@@ -1,4 +1,4 @@
-﻿namespace ProjectMover.Lib.Misc {
+﻿namespace ProjectMover.Lib.Helpers {
 
   /// <summary>
   /// Represents a rule for mapping a source project path to a designated destination path, 

@@ -1,4 +1,4 @@
-﻿using ProjectMover.Lib.Misc;
+﻿using ProjectMover.Lib.Helpers;
 
 namespace ProjectMover.Tests.Unit {
   [TestClass]

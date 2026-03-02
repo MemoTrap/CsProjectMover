@@ -7,7 +7,7 @@ global using ProjectMover.Gui.Lib;
 global using ProjectMover.Lib;
 global using ProjectMover.Lib.Api;
 global using ProjectMover.Lib.Extensions;
-global using ProjectMover.Lib.Misc;
+global using ProjectMover.Lib.Helpers;
 
 global using static core.audiamus.aux.Logging;
 

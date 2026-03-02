@@ -1,13 +1,12 @@
 ﻿using ProjectMover.Lib.Api;
 
 namespace ProjectMover.Tests.Integration {
-  using ProjectMover.Lib;
-  using ProjectMover.Lib.Extensions;
-
-  using static ProjectMover.Tests.Const;
-  using static ProjectMover.Tests.ConfirmationAssertions;
-  using static ProjectMover.Tests.TestFieldFixture;
   using ProjectMover.Global.Lib;
+  using ProjectMover.Lib;
+
+  using static ProjectMover.Tests.ConfirmationAssertions;
+  using static ProjectMover.Tests.Const;
+  using static ProjectMover.Tests.TestFieldFixture;
 
   internal static class MoveProjectTestsCommon {
 

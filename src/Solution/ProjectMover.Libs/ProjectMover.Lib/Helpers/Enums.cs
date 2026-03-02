@@ -1,4 +1,4 @@
-﻿namespace ProjectMover.Lib.Misc {
+﻿namespace ProjectMover.Lib.Helpers {
   [Flags]
   public enum EMultiMode {
     None = 0,

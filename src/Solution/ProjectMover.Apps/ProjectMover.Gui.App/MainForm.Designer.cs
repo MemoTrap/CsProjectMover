@@ -129,7 +129,7 @@
       rbMulProjMulSol.Name = "rbMulProjMulSol";
       rbMulProjMulSol.Size = new Size (215, 19);
       rbMulProjMulSol.TabIndex = 2;
-      rbMulProjMulSol.Text = "multiple projects / multiple solution";
+      rbMulProjMulSol.Text = "Multiple projects / multiple solution";
       toolTip.SetToolTip (rbMulProjMulSol, "Select multiple projects for move/rename or copy and multiple dependent solutions.");
       rbMulProjMulSol.UseVisualStyleBackColor = true;
       rbMulProjMulSol.Click += rbProjSol_CheckedChanged;

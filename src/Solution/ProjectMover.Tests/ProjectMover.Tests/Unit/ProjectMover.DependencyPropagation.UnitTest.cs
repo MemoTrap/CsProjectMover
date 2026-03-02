@@ -1,5 +1,5 @@
 ﻿namespace ProjectMover.Tests.Unit {
-  using ProjectMover.Lib.Misc;
+  using ProjectMover.Lib.Helpers;
   using ProjectMover.Lib.Models;
 
   using static Const;
@@ -58,7 +58,7 @@
     }
 
     private static void assert (IEnumerable<string> expectedNames, IEnumerable<FileBase> actualProjsOrSlns) {
-      List<string> actualNames = actualProjsOrSlns.Select (p => p.Name).ToList ();
+      List<string> actualNames = [.. actualProjsOrSlns.Select (p => p.Name)];
       foreach (var expected in expectedNames) 
         Assert.IsTrue (actualNames.Contains (expected), $"expected '{expected}' not in actual names");
       foreach (var actual in actualNames) 

@@ -9,8 +9,8 @@
     <Company>MemoTrap</Company>
     <Copyright>Copyright © 2026 - $([System.DateTime]::UtcNow.Year) MemoTrap ($([System.DateTime]::UtcNow.ToString("s")))</Copyright>
     <AssemblyName>C# Project Mover</AssemblyName>
-    <AssemblyVersion>1.1.0.0</AssemblyVersion>
-    <FileVersion>1.1.0.0</FileVersion>
+    <AssemblyVersion>1.2.0.0</AssemblyVersion>
+    <FileVersion>1.2.0.0</FileVersion>
     <ApplicationIcon>Resources\ProjectMover.ico</ApplicationIcon>
   </PropertyGroup>
 

@@ -4,7 +4,7 @@
 #pragma warning disable CA1860
 #pragma warning disable IDE0305
 
-using static ProjectMover.Lib.Misc.ProjectDependencyGraph;
+using static ProjectMover.Lib.Helpers.ProjectDependencyGraph;
 
 namespace ProjectMover.Lib.Steps {
   internal class Step3UserInteraction {
@@ -16,10 +16,10 @@ namespace ProjectMover.Lib.Steps {
     private readonly IReadOnlyList<ProjectFile> _candidateProjects;
     private readonly DependentSolutionsAndProjects _dependencies;
 
-    private readonly Dictionary<string, ProjectOperationPlan> _projectPlans =
-      new (StringComparer.OrdinalIgnoreCase);
-    private readonly Dictionary<string, SolutionOperationPlan> _solutionPlans =
-      new (StringComparer.OrdinalIgnoreCase);
+    private readonly Dictionary<ProjectFile, ProjectOperationPlan> _projectPlans =
+      [];
+    private readonly Dictionary<SolutionFile, SolutionOperationPlan> _solutionPlans =
+      [];
 
     private int[]? _preselectedIndexesCache = null;
     IEnumerable<string>? _preselectedAbsProjPaths = null;
@@ -29,6 +29,9 @@ namespace ProjectMover.Lib.Steps {
 
     private readonly DependencyPropagation _dependencyPropagation;
     private readonly DestinationPathRule _destinationRule;
+    
+    private readonly IReadOnlyList<ProjectFile> _allProjects;
+    private readonly IReadOnlyList<SolutionFile> _allSolutions;
 
     public Step3UserInteraction (
       IProgressSink progress,
@@ -44,6 +47,9 @@ namespace ProjectMover.Lib.Steps {
       _decisionProvider = decisionProvider;
       _candidateProjects = candidateProjects;
       _dependencies = dependencies;
+
+      _allProjects = _candidateProjects.Union (_dependencies.Projects).ToList ();
+      _allSolutions = _dependencies.Solutions.ToList ();
 
       _destinationRule = new DestinationPathRule (_parameters.DestinationFolder!);
       _dependencyPropagation = new DependencyPropagation (candidateProjects, dependencies);
@@ -67,13 +73,13 @@ namespace ProjectMover.Lib.Steps {
         ct.ThrowIfCancellationRequested ();
 
         if (withPreselect) 
-          userPreselect ();
+          fetchPreselectionsFromUser ();
 
         withPreselect = _preselectedAbsProjPaths?.Any() ?? false;
 
         ct.ThrowIfCancellationRequested ();
 
-        bool proceed = userSelect (ct);
+        bool proceed = fetchProjectDecisonsFromUserAndApply (ct);
         if (!proceed)
           continue;
 
@@ -83,9 +89,11 @@ namespace ProjectMover.Lib.Steps {
         }
 
         reviewPlansToRemoveAllegedlyAffectedSolutions ();
-
-        var plans = new ProjectAndSolutionPlans (_projectPlans, _solutionPlans);
-        proceed = callbackConfirm (plans);
+        
+        var plans = new ProjectAndSolutionPlans (
+          _projectPlans.Values.ToList(), 
+          _solutionPlans.Values.ToList());
+        proceed = callbackFinalConfirm (plans);
         if (!proceed)
           return null;
 
@@ -94,7 +102,7 @@ namespace ProjectMover.Lib.Steps {
     }
 
 
-    private void userPreselect () {
+    private void fetchPreselectionsFromUser () {
       var projectPaths = _candidateProjects
         .Select (p => p.AbsolutePath.ToParaPath (_parameters))
         .ToList ();
@@ -149,7 +157,9 @@ namespace ProjectMover.Lib.Steps {
       }
 
       // from all previous decisions = created project plans 
-      combinedPreselect = combinedPreselect.Union (_projectPlans.Keys, StringComparer.OrdinalIgnoreCase).ToList ();
+      combinedPreselect = combinedPreselect
+        .Union (getParaPaths(_projectPlans.Keys), StringComparer.OrdinalIgnoreCase)
+        .ToList ();
 
       return findIndexes (allPaths, combinedPreselect);
     }
@@ -173,7 +183,7 @@ namespace ProjectMover.Lib.Steps {
       return indexes;
     }
 
-    private bool userSelect (CancellationToken ct) {
+    private bool fetchProjectDecisonsFromUserAndApply (CancellationToken ct) {
       HashSet<string> designatedFolderNames = new (StringComparer.OrdinalIgnoreCase);
 
       bool preselected = _preselectedAbsProjPaths is not null && _preselectedAbsProjPaths.Any ();
@@ -461,44 +471,24 @@ namespace ProjectMover.Lib.Steps {
         // Solutions shall apply the new GUID
         plan.NewProjectGuid = Guid.NewGuid ();
 
-        HashSet<ProjectFile> affectedProjects = [];
-        HashSet<SolutionFile> affectedSolutions = [];
 
         bool proceed = findAllCopyAffectedProjectsAndSolutions (
+          plan,
           extraContext,
           decision,
-          affectedProjects,
-          affectedSolutions,
           preselected
+          //out var affectedProjects,
+          //out var affectedSolutions
         );
 
-        if (proceed) {
-          addAffectedProjectsToPlan (plan, affectedProjects, true);
-          
-          // mark user selected solutions
-
-          var selectedSolutions = affectedSolutions
-            .Where (s => decision.SelectedSolutions?
-              .Contains (s.AbsolutePath, StringComparer.OrdinalIgnoreCase) ?? false) 
-            .ToList ();
-
-          var affectedSolutionsAssessed = affectedSolutions
-            .Select (s => (s, selectedSolutions.Contains (s)))
-            .ToList();
-
-          addAffectedSolutionsToPlan (project, plan, affectedSolutionsAssessed);
-
-          _selectedSolutionsCache.UnionWith (selectedSolutions);
-        }
         return proceed;
 
       } else {
-        var affectedSolutions = extraContext.DependentSolutions
-          .Select (s => (s, false))
-          .ToList();
+        var affectedSolutions = 
+          extraContext.DependentSolutions.ToList();
 
         // all dependent solutions will be affected
-        addAffectedSolutionsToPlan (project, plan, affectedSolutions);
+        addAffectedSolutionsToPlan (plan, affectedSolutions);
 
         // all dependent projects will be affected
         addAffectedProjectsToPlan (plan, extraContext.DependentProjects);
@@ -508,10 +498,9 @@ namespace ProjectMover.Lib.Steps {
     }
 
     private bool findAllCopyAffectedProjectsAndSolutions (
+      ProjectOperationPlan plan,
       ProjectContextExtra extraContext, 
       ProjectUserDecision decision, 
-      HashSet<ProjectFile> affectedProjects, 
-      HashSet<SolutionFile> affectedSolutions,
       bool preselected
     ) {
 
@@ -521,14 +510,14 @@ namespace ProjectMover.Lib.Steps {
          ) ?? false)
         .ToList ();
       var decisionSolutions = extraContext.DependentSolutions
-        .Where (dp => decision.SelectedSolutions?.Contains(
-          dp.AbsolutePath, StringComparer.OrdinalIgnoreCase
+        .Where (ds => decision.SelectedSolutions?.Contains(
+          ds.AbsolutePath, StringComparer.OrdinalIgnoreCase
          ) ?? false)
         .ToList ();
 
-      affectedProjects.UnionWith (decisionProjects);
-      affectedSolutions.UnionWith (decisionSolutions);
-
+      HashSet<ProjectFile> affectedProjects = decisionProjects.ToHashSet (); ;
+      HashSet<SolutionFile> affectedSolutions = decisionSolutions.ToHashSet ();
+      
       var (propagatedProjects, propagatedSolutions) =
         _dependencyPropagation.ComputeCopyPropagation (
           extraContext.Project,
@@ -537,10 +526,12 @@ namespace ProjectMover.Lib.Steps {
         );
 
 
-      var addedProjects = propagatedProjects.Except (affectedProjects).ToList ();
-      var addedSolutions = propagatedSolutions.Except (affectedSolutions).ToList ();
+      var addedProjects = propagatedProjects
+        .Except (affectedProjects).ToList ();
+      var addedSolutions = propagatedSolutions
+        .Except (affectedSolutions).ToList ();
 
-      bool proceed = callbackDependencyPropgations (
+      bool proceed = callbackDependencyPropagationsConfirm (
         extraContext.Project, 
         propagatedProjects, 
         propagatedSolutions, 
@@ -548,11 +539,32 @@ namespace ProjectMover.Lib.Steps {
       );
 
       if (proceed) {
-        affectedProjects.UnionWith (addedProjects);
-        affectedSolutions.UnionWith (addedSolutions);
-        affectedProjects.Remove (extraContext.Project);
-      }
 
+        affectedProjects.UnionWith (propagatedProjects); 
+        affectedSolutions.UnionWith (propagatedSolutions);
+
+        addAffectedProjectsToPlan (
+          plan,
+          affectedProjects,
+          decisionProjects,
+          true);
+        
+        addAffectedSolutionsToPlan (
+          plan, 
+          affectedSolutions, 
+          decisionSolutions);
+
+
+        // identify user selected solution dependencies for cache
+        var selectedSolutions = affectedSolutions
+          .Where (s => decisionSolutions?
+            .Contains (s) ?? false)
+          .ToList ();
+        _selectedSolutionsCache.UnionWith (selectedSolutions);
+
+
+      }
+        
       return proceed;
 
     }
@@ -562,72 +574,82 @@ namespace ProjectMover.Lib.Steps {
       if (!_parameters.Copy)
         return;
 
-      // Any explicitly selected solutions?
-      // If not let the dependency propagation prevail 
-      bool hasSelectedSolutions = _solutionPlans.Values.Any(s => s.IsUserSelected);
-      if (!hasSelectedSolutions)
-        return;
 
       // Affected solutions in plans that have not been selected
       var unselectedSolutions = _solutionPlans.Values
-        .Where (p => !p.IsUserSelected)
+        .Where (p => !p.IsUserAppliedDependency)
         .Select (p => p.Solution)
         .ToList ();
 
+
       foreach (var solution in unselectedSolutions) {
+        // all referenced projects in a solution
+        var referencedProjects = 
+          _dependencyPropagation.GetReferencedProjects (solution);
+
         // Find the project plans where these solutions are referenced
-        var referencingProjectPlans = _projectPlans.Values
-          .Where (p => p.AffectedSolutions.Contains (solution))
+        var referencedProjectPlans = _projectPlans.Values
+          .Where (p => referencedProjects.Contains (p.Project)) 
           .ToList ();
 
         // If all referencing project plans are selected projects then remove solution from all 
-        bool areAllSelected = referencingProjectPlans.All (p => p.IsUserSelected);
+        bool areAllSelected = referencedProjectPlans
+          .All (p => p.IsUserSelected /*|| p.IsUserAppliedDependency*/);
         if (areAllSelected) {
-          _solutionPlans.Remove (solution.AbsolutePath);
+          _solutionPlans.Remove (solution);
 
-          foreach (var projPlan in referencingProjectPlans)
+          foreach (var projPlan in referencedProjectPlans)
             projPlan.AffectedSolutions.Remove (solution);
         }
       }
     }
 
-    private void addAffectedSolutionsToPlan (
-      ProjectFile project, 
-      ProjectOperationPlan projPlan,
-      IEnumerable<(SolutionFile sln, bool selected)> solutions
-    ) {
-      foreach (var (sln, selected) in solutions) {
-        projPlan.AffectedSolutions.Add (sln);
-        var slnPlan = getOrCreateSolutionPlan (sln);
-        slnPlan.AffectedProjects.Add (project);
-        if (selected)
-          slnPlan.IsUserSelected = true;
 
+    private void addAffectedSolutionsToPlan (
+      ProjectOperationPlan projPlan,
+      IEnumerable<SolutionFile> affectedSolutions,
+      IEnumerable<SolutionFile>? decisionSolutions = null
+    ) {
+      foreach (var sln in affectedSolutions) {
+        projPlan.AffectedSolutions.Add (sln);
+
+        bool isUserAppliedDependency = decisionSolutions?.Contains (sln) ?? false;
+        var slnPlan = getOrCreateSolutionPlan (sln);
+        slnPlan.AffectedProjects.Add (projPlan.Project);
+          if (isUserAppliedDependency)
+            slnPlan.IsUserAppliedDependency = true;
+        
       }
     }
 
     private void addAffectedProjectsToPlan (
       ProjectOperationPlan plan, 
-      IEnumerable<ProjectFile> projects,
+      IEnumerable<ProjectFile> affectedProjects,
+      IEnumerable<ProjectFile>? decisionProjects = null,
       bool isCopyGroup = false
     ) {
-      foreach (var depProj in projects) {
+      foreach (var depProj in affectedProjects) {
         plan.AffectedDependentProjects.Add (depProj);
+        
+        bool isUserAppliedDependency = decisionProjects?.Contains (depProj) ?? false;
         var depPlan = getOrCreateProjectPlan (depProj);
         depPlan.Included = true;
         depPlan.IsDependency = true;
-        depPlan.IsCopyGroupDependency = isCopyGroup;
+        if (isCopyGroup)
+          depPlan.IsCopyGroupDependency = true;
+        if (isUserAppliedDependency)
+          depPlan.IsUserAppliedDependency = true;
       }
     }
 
 
     private SolutionOperationPlan getOrCreateSolutionPlan (SolutionFile solution) =>
-      _solutionPlans.GetOrAdd (solution.AbsolutePath, _ => new SolutionOperationPlan (solution));
+      _solutionPlans.GetOrAdd (solution, _ => new SolutionOperationPlan (solution));
 
     private ProjectOperationPlan getOrCreateProjectPlan (ProjectFile project) =>
-      _projectPlans.GetOrAdd (project.AbsolutePath, _ => new ProjectOperationPlan (project));
+      _projectPlans.GetOrAdd (project, _ => new ProjectOperationPlan (project));
 
-    private bool callbackConfirm (ProjectAndSolutionPlans plans) {
+    private bool callbackFinalConfirm (ProjectAndSolutionPlans plans) {
       const int MAX_DISPLAY = 20;
 
       StringBuilder sb = new ();
@@ -657,7 +679,7 @@ namespace ProjectMover.Lib.Steps {
       string affectedProjects () {
         StringBuilder sbProj = new ();
 
-        var projPlans = plans.ProjectPlans.Values
+        var projPlans = plans.ProjectPlans
           .Where (p => p.Included)
           .ToList ();
         
@@ -685,8 +707,8 @@ namespace ProjectMover.Lib.Steps {
 
       string affectedSolutions () {
         StringBuilder sbSol = new ();
-        var solPlans = plans.SolutionPlans.Values;
-        int nSolPlans = solPlans.Count ();
+        var solPlans = plans.SolutionPlans;
+        int nSolPlans = solPlans.Count;
         sbSol.AppendLine (
           $"{nSolPlans} solution{pluralS(nSolPlans)} affected:"
         );
@@ -709,7 +731,7 @@ namespace ProjectMover.Lib.Steps {
       }
     }
 
-     private bool callbackDependencyPropgations (
+     private bool callbackDependencyPropagationsConfirm (
        ProjectFile projectToCopy,
        IReadOnlyCollection<ProjectFile> projects,
        IReadOnlyCollection<SolutionFile> solutions,
@@ -800,6 +822,28 @@ namespace ProjectMover.Lib.Steps {
 
         return sbSol.ToString();
       }
+    }
+
+    private ProjectFile? getProject (string projPath) {
+      string absPath = projPath.ToAbsolutePath (_parameters.RootFolder!);
+      return _allProjects
+        .FirstOrDefault (p => p.AbsolutePath.Equals (absPath, StringComparison.OrdinalIgnoreCase));
+    }
+
+    private SolutionFile? getSolution (string slnPath) {
+      string absPath = slnPath.ToAbsolutePath (_parameters.RootFolder!);
+      return _allSolutions
+        .FirstOrDefault (p => p.AbsolutePath.Equals (absPath, StringComparison.OrdinalIgnoreCase));
+    }
+
+    private string getParaPath (FileBase model) {
+      return model.AbsolutePath.ToParaPath (_parameters);
+    }
+
+    private IReadOnlyList<string> getParaPaths (IEnumerable<FileBase> models) {
+      return models
+        .Select (m => m.AbsolutePath.ToParaPath (_parameters))
+        .ToList ();
     }
 
     private static string pluralS (int cnt) => cnt != 1 ? "s" : "";

@@ -1,5 +1,7 @@
 ﻿#pragma warning disable IDE0305
 
+using ProjectMover.Lib.Helpers;
+
 namespace ProjectMover.Lib.Models {
   internal class CsProjectFile (string projectFilePath) : ProjectFile(projectFilePath, EXT) {
     public const string EXT = ".csproj";

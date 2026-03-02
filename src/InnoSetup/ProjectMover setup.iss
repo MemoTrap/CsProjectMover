@@ -1,5 +1,5 @@
 #define MyAppSetupName 'C# Project Mover'
-#define MyAppVersion '1.1.0'
+#define MyAppVersion '1.2.0'
 #define MyProgramExe = 'C# Project Mover.exe'
 #define MyCompany = 'MemoTrap'
 #define MyAppName = 'CsProjectMover'

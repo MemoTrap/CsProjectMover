@@ -1,6 +1,8 @@
 ﻿#pragma warning disable IDE0079
 #pragma warning disable CA2208
 
+using ProjectMover.Lib.Helpers;
+
 namespace ProjectMover.Lib.FileOps;
 
 internal static class FileOperationContextFactory {

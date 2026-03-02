@@ -1,9 +1,8 @@
 ﻿#pragma warning disable IDE0079
 #pragma warning disable CA1859
+#pragma warning disable IDE0305
 
-using static ProjectMover.Lib.Misc.ProjectDependencyGraph;
-
-namespace ProjectMover.Lib.Misc {
+namespace ProjectMover.Lib.Helpers {
   internal class ProjectDependencyGraph {
     public enum ERefKind {
       ReferencedBy,
@@ -14,16 +13,11 @@ namespace ProjectMover.Lib.Misc {
         new (StringComparer.OrdinalIgnoreCase);
     private Dictionary<ProjectFile, Node> _nodesByProject = [];
 
-    public sealed class Node {
-      public ProjectFile Project { get; }
-      public string TargetAbsRefPath { get; }
+    public sealed class Node (ProjectFile project) {
+      public ProjectFile Project { get; } = project;
+      public string TargetAbsRefPath { get; } = targetAbsRefPath (project);
       public HashSet<Node> References { get; } = [];
       public HashSet<Node> ReferencedBy { get; } = [];
-
-      public Node (ProjectFile project) {
-        Project = project;
-        TargetAbsRefPath = targetAbsRefPath (project);
-      }
 
       public override string ToString () => $"{Project.Name}, refs={References.Count}, refBy={ReferencedBy.Count}";
     }

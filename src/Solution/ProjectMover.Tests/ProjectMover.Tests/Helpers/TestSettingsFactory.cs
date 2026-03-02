@@ -1,7 +1,7 @@
 ﻿#pragma warning disable IDE0130
 
 using ProjectMover.Lib.Api;
-using ProjectMover.Lib.Misc;
+using ProjectMover.Lib.Helpers;
 
 namespace ProjectMover.Tests {
   internal static class TestParametersFactory {

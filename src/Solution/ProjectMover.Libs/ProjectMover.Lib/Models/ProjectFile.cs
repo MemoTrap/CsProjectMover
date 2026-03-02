@@ -1,5 +1,7 @@
 ﻿#pragma warning disable IDE0305
 
+using ProjectMover.Lib.Helpers;
+
 namespace ProjectMover.Lib.Models {
 
   internal abstract class ProjectFile (string projectFilePath, string extension) : FileBase (projectFilePath, extension) {

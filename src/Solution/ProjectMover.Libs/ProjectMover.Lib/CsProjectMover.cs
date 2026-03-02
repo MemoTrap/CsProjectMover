@@ -31,6 +31,8 @@ namespace ProjectMover.Lib {
 
     private string? _cachedSolutionFolder;
 
+    private bool _lastRunFailed = false;
+
     public async Task<bool> RunAsync (
         IParameters parameters,
         CancellationToken cancellationToken = default
@@ -92,6 +94,7 @@ namespace ProjectMover.Lib {
           _callback.ShowMessage (ECallback.Information, "Operation cancelled.");
         } catch (Exception ex) {
           _callback.ShowMessage (ECallback.Error, ex.Message, ex.GetType ().Name);
+          _lastRunFailed = true;
         }
 
         return _completed;
@@ -355,18 +358,22 @@ namespace ProjectMover.Lib {
       if (parameters.MultiMode.HasFlag (EMultiMode.Solutions)) {
         string solutionFolder = parameters.SolutionFolderOrFile ?? parameters.RootFolder;
 
-        bool solutionCacheRescan = DryRun || parameters.Rescan ||
-            !solutionFolder.Equals (_cachedSolutionFolder, StringComparison.OrdinalIgnoreCase);
+        bool solutionCacheRescan = 
+          DryRun || 
+          parameters.Rescan ||
+          !solutionFolder.Equals (_cachedSolutionFolder, StringComparison.OrdinalIgnoreCase) ||
+          _lastRunFailed;
 
         if (solutionCacheRescan) {
           _solutionCache.Clear ();
           _cachedSolutionFolder = solutionFolder;
-        }
+        } 
       } else {
         _solutionCache.Clear ();
         _cachedSolutionFolder = null;
       }
 
+      _lastRunFailed = false;
 
       // TODO review project cache update logic, currently disabled.
       // Referencedprojects in ProjectFile must be updated on reset, too.

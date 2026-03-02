@@ -1,13 +1,18 @@
-﻿using static ProjectMover.Lib.Misc.ProjectDependencyGraph;
+﻿#pragma warning disable IDE0079
+#pragma warning disable CA1859
+#pragma warning disable CA1860
+#pragma warning disable IDE0305
 
-namespace ProjectMover.Lib.Misc {
+using static ProjectMover.Lib.Helpers.ProjectDependencyGraph;
+
+namespace ProjectMover.Lib.Helpers {
   internal class DependencyPropagation {
     private readonly IReadOnlyList<ProjectFile> _candidateProjects;
     private readonly DependentSolutionsAndProjects _dependencies;
 
 
-    private IReadOnlyDictionary<SolutionFile, IReadOnlyCollection<ProjectFile>>? _projectsBySolution;
-    private ProjectDependencyGraph _projectDependencyGraph;
+    private readonly IReadOnlyDictionary<SolutionFile, IReadOnlyCollection<ProjectFile>> _projectsBySolution;
+    private readonly ProjectDependencyGraph _projectDependencyGraph;
 
     public ProjectDependencyGraph ProjectDependencyGraph => _projectDependencyGraph;
 
@@ -19,10 +24,10 @@ namespace ProjectMover.Lib.Misc {
       _dependencies = dependencies;
       _projectDependencyGraph = new ProjectDependencyGraph (_candidateProjects, dependencies.Projects);
 
-      init ();
+      _projectsBySolution = initProjectsBySolution ();
     }
 
-    private void init () {
+    private IReadOnlyDictionary<SolutionFile, IReadOnlyCollection<ProjectFile>> initProjectsBySolution () {
       Dictionary<SolutionFile, HashSet<ProjectFile>> projectsBySolution
         = [];
 
@@ -40,7 +45,7 @@ namespace ProjectMover.Lib.Misc {
         }
       }
 
-      _projectsBySolution = projectsBySolution.ToDictionary (
+      return projectsBySolution.ToDictionary (
         kvp => kvp.Key,
         kvp => (IReadOnlyCollection<ProjectFile>)kvp.Value);
 
@@ -49,6 +54,19 @@ namespace ProjectMover.Lib.Misc {
         path, StringComparison.OrdinalIgnoreCase));
     }
 
+    }
+
+    public IReadOnlyCollection<SolutionFile> GetReferencingSolutions (IEnumerable<ProjectFile> projects) {
+      var affectableSolutions = _projectsBySolution
+        .Where (kvp => kvp.Value.Intersect(projects).Any())
+        .Select (kvp => kvp.Key)
+        .ToList (); 
+      return affectableSolutions;
+    }
+
+    public IReadOnlyCollection<ProjectFile> GetReferencedProjects (SolutionFile solution) {
+      var affectedProjects = _projectsBySolution.GetValueOrDefault (solution);
+      return affectedProjects ?? [];
     }
 
     public (

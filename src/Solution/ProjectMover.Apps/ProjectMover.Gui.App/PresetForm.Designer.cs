@@ -48,7 +48,7 @@
       // btnCancel
       // 
       btnCancel.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-      btnCancel.Location = new Point (397, 16);
+      btnCancel.Location = new Point (396, 16);
       btnCancel.Name = "btnCancel";
       btnCancel.Size = new Size (75, 39);
       btnCancel.TabIndex = 2;
@@ -59,8 +59,8 @@
       // 
       // btnLater
       // 
-      btnLater.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-      btnLater.Location = new Point (97, 16);
+      btnLater.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+      btnLater.Location = new Point (317, 16);
       btnLater.Name = "btnLater";
       btnLater.Size = new Size (75, 39);
       btnLater.TabIndex = 1;
@@ -71,8 +71,8 @@
       // 
       // btnOK
       // 
-      btnOK.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-      btnOK.Location = new Point (16, 16);
+      btnOK.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+      btnOK.Location = new Point (238, 16);
       btnOK.Name = "btnOK";
       btnOK.Size = new Size (75, 39);
       btnOK.TabIndex = 0;

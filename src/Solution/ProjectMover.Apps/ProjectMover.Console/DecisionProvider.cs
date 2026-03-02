@@ -1,14 +1,10 @@
 ﻿
 using ProjectMover.Lib.Api;
-using ProjectMover.Lib.Misc;
 using ProjectMover.Global.Lib;
+using ProjectMover.Lib.Helpers;
 
 namespace ProjectMover.ConsApp {
   internal sealed class ConsoleProjectDecisionProvider : IProjectDecisionProvider {
-
-    // No preselection with this implementation
-    public IEnumerable<string>? PreSelect (IEnumerable<string> projectPaths, int[]? preset) => null;
-
 
     public ProjectUserDecision Decide (ProjectDecisionContext context) {
       // final blank line

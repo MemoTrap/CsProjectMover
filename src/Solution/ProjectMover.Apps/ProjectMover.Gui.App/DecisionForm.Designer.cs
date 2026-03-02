@@ -102,8 +102,8 @@
       // 
       // btnSkip
       // 
-      btnSkip.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-      btnSkip.Location = new Point (97, 54);
+      btnSkip.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+      btnSkip.Location = new Point (373, 54);
       btnSkip.Name = "btnSkip";
       btnSkip.Size = new Size (75, 39);
       btnSkip.TabIndex = 1;
@@ -114,8 +114,8 @@
       // 
       // btnOK
       // 
-      btnOK.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-      btnOK.Location = new Point (16, 54);
+      btnOK.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+      btnOK.Location = new Point (292, 54);
       btnOK.Name = "btnOK";
       btnOK.Size = new Size (75, 39);
       btnOK.TabIndex = 0;
