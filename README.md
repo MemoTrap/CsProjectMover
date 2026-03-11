@@ -59,17 +59,18 @@ Beyond the obvious `.csproj` file and its containing folder, projects will be re
 
 ### Windows Desktop UI
 - Built as a **Windows Forms application**
-- Clear, dialog-driven workflow
-- Dedicated dialogs for:
-  - Project selection
-  - Target folder selection
-  - Decision / confirmation steps
+- Dialog-driven
 
+### Workflow by dialog
+- Main dialog for:
+  - Mode selection *move* or *copy*
+  - Root / project / target / solution folder selection
+  - SVN activation *(see below)*
+- Per project dialog for:
+  - Fine tuning of project path, project name or assembly name
+  - Selection of projects and solutions to use a project copy
+- Confirmation message boxes
 
-### Non-Destructive by Design
-- Explicit choice between *move* and *copy*
-- No silent overwrites
-- Designed to make project changes transparent and predictable
 
 ### SVN Integration
 
